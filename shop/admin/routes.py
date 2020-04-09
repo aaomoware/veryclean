@@ -2,13 +2,37 @@ from flask import render_template, request, session, redirect, url_for, flash
 from shop import app, db, bcrypt
 from .forms import RegistrationForm, LoginForm
 from .models import User
+from shop.products.models import Addproduct, Brand, Category
 
 @app.route('/admin')
 def admin():
     if 'email' not in session:
         flash('Please login first', 'danger')
         return redirect(url_for('login'))
-    return render_template('admin/index.html', title='Admin Page')
+    products = Addproduct.query.all()
+    return render_template('admin/index.html', title='Admin Page', products=products)
+
+
+
+@app.route('/brands')
+def brands():
+    if 'email' not in session:
+        flash('Please login first', 'danger')
+        return redirect(url_for('login'))
+    brands = Brand.query.order_by(Brand.id.desc()).all()
+    return render_template('admin/brands.html', title='Brand Page', brands=brands)
+
+
+
+@app.route('/categories')
+def categories():
+    if 'email' not in session:
+        flash('Please login first', 'danger')
+        return redirect(url_for('login'))
+    categories = Category.query.order_by(Category.id.desc()).all()
+    return render_template('admin/brands.html', title='Category Page', categories=categories)
+
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
