@@ -9,7 +9,7 @@ import secrets, os
 @app.route('/addbrand', methods=['GET', 'POST'])
 def addbrand():
     if 'email' not in session:
-        flash('Please login first', 'danger')
+        flash(f'Please login first', 'danger')
         return redirect(url_for('login'))
 
     if request.method == 'POST':
@@ -98,7 +98,7 @@ def updatecategory(id):
 @app.route('/deletecategory/<int:id>', methods=['POST'])
 def deletecategory(id):
     if 'email' not in session:
-        flash('Please login first', 'danger')
+        flash(f'Please login first', 'danger')
         return redirect(url_for('login'))
 
     category = Category.query.get_or_404(id)
@@ -117,7 +117,7 @@ def deletecategory(id):
 @app.route('/addproduct', methods=['GET', 'POST'])
 def addproduct():
     if 'email' not in session:
-        flash('Please login first', 'danger')
+        flash(f'Please login first', 'danger')
         return redirect(url_for('login'))
     brands = Brand.query.all()
     categories = Category.query.all()
@@ -210,3 +210,27 @@ def updateproduct(id):
     form.colours.data = products.colours
     form.description.data = products.description
     return render_template('products/updateproduct.html', form=form, brands=brands, products=products, categories=categories)
+
+
+@app.route('/deleteproduct/<int:id>', methods=['POST'])
+def deleteproduct(id):
+    if 'email' not in session:
+        flash(f'Please login in first', 'danger')
+        return redirect(url_for('login'))
+    
+    product = Addproduct.query.get_or_404(id)
+
+    if request.method == 'POST':
+        if request.files.get('image_1'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, "static/images/" + products.image_1))
+                os.unlink(os.path.join(current_app.root_path, "static/images/" + products.image_2))
+                os.unlink(os.path.join(current_app.root_path, "static/images/" + products.image_3))
+            except Exception as e:
+                print(e)
+        db.session.delete(product)
+        db.session.commit()
+        flash(f'The product {product.name} has been deleted', 'success')
+        return redirect(url_for('admin'))
+    flash(f'{product.name} cannot be deleted', 'warning')
+    return redirect(url_for('admin'))
