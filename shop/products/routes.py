@@ -95,6 +95,25 @@ def updatecategory(id):
 
 
 
+@app.route('/deletecategory/<int:id>', methods=['POST'])
+def deletecategory(id):
+    if 'email' not in session:
+        flash('Please login first', 'danger')
+        return redirect(url_for('login'))
+
+    category = Category.query.get_or_404(id)
+    
+    if request.method == 'POST':
+        db.session.delete(category)
+        db.session.commit()
+        flash(f'The category {category.name} was deleted from the database', 'success')
+        return redirect(url_for('categories'))
+
+    flash(f'The category {category.name} cant not be deleted', 'warning')
+    return redirect(url_for('categories'))
+
+
+
 @app.route('/addproduct', methods=['GET', 'POST'])
 def addproduct():
     if 'email' not in session:
