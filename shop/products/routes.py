@@ -5,6 +5,29 @@ from .forms import Addproducts
 import secrets, os
 
 
+@app.route('/')
+def home():
+    products = Addproduct.query.filter(Addproduct.stock > 0)
+    brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
+    categories = Category.query.all()
+
+    colours = []
+    for product in products:
+        colours.append(product.colours)
+    return render_template('products/index.html', products=products, brands=brands, categories=categories, colours=set(colours))
+
+
+@app.route('/brand/<int:id>')
+def get_brand(id):
+    products = Addproduct.query.filter_by(brand_id=id)
+    brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
+    categories = Category.query.all()
+
+    colours = []
+    for product in products:
+        colours.append(product.colours)
+    return render_template('products/index.html', products=products, brands=brands, categories=categories, colours=set(colours))
+
 
 @app.route('/addbrand', methods=['GET', 'POST'])
 def addbrand():
