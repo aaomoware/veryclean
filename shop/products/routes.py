@@ -9,7 +9,7 @@ import secrets, os
 def home():
     products = Addproduct.query.filter(Addproduct.stock > 0)
     brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
-    categories = Category.query.all()
+    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
 
     colours = []
     for product in products:
@@ -21,12 +21,25 @@ def home():
 def get_brand(id):
     products = Addproduct.query.filter_by(brand_id=id)
     brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
-    categories = Category.query.all()
+    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
 
     colours = []
     for product in products:
         colours.append(product.colours)
-    return render_template('products/index.html', products=products, brands=brands, categories=categories, colours=set(colours))
+    return render_template('products/index.html', brand=products, brands=brands, categories=categories, colours=set(colours))
+
+
+@app.route('/category/<int:id>')
+def get_category(id):
+    products = Addproduct.query.filter_by(category_id=id)
+    brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
+    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
+
+    colours = []
+    for product in products:
+        colours.append(product.colours)
+    return render_template('products/index.html', category=products, brands=brands, categories=categories, colours=set(colours))
+
 
 
 @app.route('/addbrand', methods=['GET', 'POST'])
