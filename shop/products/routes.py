@@ -18,7 +18,7 @@ def addbrand():
         db.session.add(brand)
         db.session.commit()
         flash(f'The Brand {getbrand} has been added to the database', 'success')
-        return redirect(url_for('addbrand'))
+        return redirect(url_for('brands'))
 
     return render_template('products/brand_category.html', brands='brands')
 
@@ -71,7 +71,7 @@ def addcategory():
         db.session.add(category)
         db.session.commit()
         flash(f'The Category {getcategory} has been added to the database', 'success')
-        return redirect(url_for('addcategory'))
+        return redirect(url_for('categories'))
 
     return render_template('products/brand_category.html', brands=False)
 
@@ -153,7 +153,7 @@ def addproduct():
         db.session.add(addproduct)
         db.session.commit()
         flash(f'The product {name} has been added to the database', 'success')
-        return redirect(url_for('addproduct'))
+        return redirect(url_for('admin'))
 
     return render_template('products/addproduct.html', title='Add Product Page',
                            form=form,
