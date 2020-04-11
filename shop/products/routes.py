@@ -7,38 +7,43 @@ import secrets, os
 
 @app.route('/')
 def home():
-    products = Addproduct.query.filter(Addproduct.stock > 0)
+    page = request.args.get('page', 1, type=int)
+    products = Addproduct.query.filter(Addproduct.stock > 0).paginate(page=page, per_page=8)
     brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
     categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
 
     colours = []
-    for product in products:
+    for product in products.items:
         colours.append(product.colours)
     return render_template('products/index.html', products=products, brands=brands, categories=categories, colours=set(colours))
 
 
 @app.route('/brand/<int:id>')
 def get_brand(id):
-    products = Addproduct.query.filter_by(brand_id=id)
+    page = request.args.get('page', 1, type=int)
+    brand_id = Brand.query.filter_by(id=id).first_or_404()
+    products = Addproduct.query.filter_by(brand=brand_id).paginate(page=page, per_page=6)
     brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
     categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
 
     colours = []
-    for product in products:
+    for product in products.items:
         colours.append(product.colours)
-    return render_template('products/index.html', brand=products, brands=brands, categories=categories, colours=set(colours))
+    return render_template('products/index.html', brand=products, brands=brands, categories=categories, colours=set(colours), brand_id=brand_id)
 
 
 @app.route('/category/<int:id>')
 def get_category(id):
-    products = Addproduct.query.filter_by(category_id=id)
+    page = request.args.get('page', 1, type=int)
+    category_id = Category.query.filter_by(id=id).first_or_404()
+    products = Addproduct.query.filter_by(category=category_id).paginate(page=page, per_page=8)
     brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
     categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
 
     colours = []
-    for product in products:
+    for product in products.items:
         colours.append(product.colours)
-    return render_template('products/index.html', category=products, brands=brands, categories=categories, colours=set(colours))
+    return render_template('products/index.html', category=products, brands=brands, categories=categories, colours=set(colours), category_id=category_id)
 
 
 
