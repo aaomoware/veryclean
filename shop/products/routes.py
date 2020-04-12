@@ -15,7 +15,15 @@ def home():
     colours = []
     for product in products.items:
         colours.append(product.colours)
-    return render_template('products/index.html', products=products, brands=brands, categories=categories, colours=set(colours))
+    return render_template('products/index.html', products=products, brands=brands, categories=categories, colours=set(colours), home=1)
+
+
+
+@app.route('/product/<int:id>')
+def product_details(id):
+    product = Addproduct.query.get_or_404(id)
+    return render_template('products/product_details.html', product=product)
+
 
 
 @app.route('/brand/<int:id>')
