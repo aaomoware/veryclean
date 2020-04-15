@@ -19,10 +19,27 @@ def home():
 
 
 
+@app.route('/about')
+def about():
+    return render_template('products/about.html', about=1)
+
+@app.route('/shop')
+def shop():
+    page = request.args.get('page', 1, type=int)
+    products = Addproduct.query.filter(Addproduct.stock > 0).paginate(page=page, per_page=8)
+    brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
+    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
+
+    colours = []
+    for product in products.items:
+        colours.append(product.colours)
+    return render_template('products/shop.html', products=products, shop=1)
+
+
 @app.route('/product/<int:id>')
 def product_details(id):
     product = Addproduct.query.get_or_404(id)
-    return render_template('products/product_details.html', product=product)
+    return render_template('products/product_details.html', product=product, product_details=1)
 
 
 
