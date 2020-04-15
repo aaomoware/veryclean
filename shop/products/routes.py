@@ -23,6 +23,10 @@ def home():
 def about():
     return render_template('products/about.html', about=1)
 
+@app.route('/contact')
+def contactus():
+    return render_template('products/contact.html', contact=1)
+
 @app.route('/shop')
 def shop():
     page = request.args.get('page', 1, type=int)
