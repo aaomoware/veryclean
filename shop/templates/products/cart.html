@@ -3,7 +3,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col">
-						<p class="bread"><span><a href="index.html">Home</a></span> / <span>Shopping Cart</span></p>
+						<p class="bread"><span><a href="{{url_for('home')}}">Home</a></span> / <span>Shopping Cart</span></p>
 					</div>
 				</div>
 			</div>
@@ -40,36 +40,60 @@
 								<span>Price</span>
 							</div>
 							<div class="one-eight text-center">
+								<span>Discount</span>
+							</div>
+							<div class="one-eight text-center">
 								<span>Quantity</span>
 							</div>
 							<div class="one-eight text-center">
 								<span>Total</span>
 							</div>
 							<div class="one-eight text-center px-4">
+								<span>Update</span>
+							</div>
+							<div class="one-eight text-center px-4">
 								<span>Remove</span>
 							</div>
 						</div>
+						{% for key, product in session['Shoppingcart'].items() %}
+						{% set discount = "%0.2f" |format((product.discount/100) * product.price|float) %}
 						<div class="product-cart d-flex">
 							<div class="one-forth">
-								<div class="product-img" style="background-image: url(images/item-6.jpg);">
+								<div class="product-img" style="background-image: url({{url_for('static', filename='images/' + product.image)}});">
 								</div>
+								
 								<div class="display-tc">
-									<h3>Product Name</h3>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<span class="price">$68.00</span>
+									<h3>{{product.name}}</h3>
 								</div>
 							</div>
 							<div class="one-eight text-center">
 								<div class="display-tc">
-									<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100">
+									<span class="price">€{{product.price}}</span>
 								</div>
 							</div>
 							<div class="one-eight text-center">
 								<div class="display-tc">
-									<span class="price">$120.00</span>
+								{% if product.discount > 0 %}
+									<span class="discount">{{product.discount}}% is €{{discount}}</span>
+								{% else %}
+									<span class="discount"></span>
+								{% endif %}
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="{{product.quantify}}" min="1" max="100">
+								</div>
+							</div>
+							{% set subtotal = product.quantify|int * product.price|float %}
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<span class="price">€{{"%0.2f"|format((subtotal|float) - discount|float)}}</span>
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<a href="#" class="con">+</a>
 								</div>
 							</div>
 							<div class="one-eight text-center">
@@ -78,66 +102,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="product-cart d-flex">
-							<div class="one-forth">
-								<div class="product-img" style="background-image: url(images/item-7.jpg);">
-								</div>
-								<div class="display-tc">
-									<h3>Product Name</h3>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<span class="price">$68.00</span>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<form action="#">
-										<input type="text" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100">
-									</form>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<span class="price">$120.00</span>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<a href="#" class="closed"></a>
-								</div>
-							</div>
-						</div>
-						<div class="product-cart d-flex">
-							<div class="one-forth">
-								<div class="product-img" style="background-image: url(images/item-8.jpg);">
-								</div>
-								<div class="display-tc">
-									<h3>Product Name</h3>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<span class="price">$68.00</span>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100">
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<span class="price">$120.00</span>
-								</div>
-							</div>
-							<div class="one-eight text-center">
-								<div class="display-tc">
-									<a href="#" class="closed"></a>
-								</div>
-							</div>
-						</div>
+						{% endfor %}
 					</div>
 				</div>
 				<div class="row row-pb-lg">
@@ -159,12 +124,13 @@
 								<div class="col-sm-4 text-center">
 									<div class="total">
 										<div class="sub">
-											<p><span>Subtotal:</span> <span>$200.00</span></p>
+											<p><span>Subtotal:</span> <span>€{{subtotal}}</span></p>
+											<p><span>Taxation:</span> <span>€{{tax}}</span></p>
 											<p><span>Delivery:</span> <span>$0.00</span></p>
-											<p><span>Discount:</span> <span>$45.00</span></p>
+											<p><span>Discount:</span> <span>€{{totaldiscount}}</span></p>
 										</div>
 										<div class="grand-total">
-											<p><span><strong>Total:</strong></span> <span>$450.00</span></p>
+											<p><span><strong>Total:</strong></span> <span>€{{grandtotal}}</span></p>
 										</div>
 									</div>
 								</div>
