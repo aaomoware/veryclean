@@ -96,7 +96,11 @@
 										{% if product.discount > 0 %}
 										<span class="price">{{product.discount}}% Discount</span>
 										{% endif %}
-										<a href="" class="float-center btn btn-sm btn-info">Add to cart</a>
+										<form action="{{url_for('AddCart')}}" method="post">
+										<input type="hidden" name="product_id" value="{{product.id}}">
+										<input type="hidden" name="quantity" id="" value="1" min="1">
+										<button type="submit" class="float-center btn btn-sm btn-info">Add to cart</button>
+										</form>	
 									</div>
 								</div>
 							</div>
@@ -146,7 +150,11 @@
 										{% if product.discount > 0 %}
 										<span class="price">{{product.discount}}% Discount</span>
 										{% endif %}
-										<a href="" class="float-center btn btn-sm btn-info">Add to cart</a>
+										<form action="{{url_for('AddCart')}}" method="post">
+										<input type="hidden" name="product_id" value="{{product.id}}">
+										<input type="hidden" name="quantity" id="" value="1" min="1">
+										<button type="submit" class="float-center btn btn-sm btn-info">Add to cart</button>
+										</form>
 									</div>
 								</div>
 							</div>
@@ -196,7 +204,11 @@
 										{% if product.discount > 0 %}
 										<span class="price">{{product.discount}}% Discount</span>
 										{% endif %}
-										<a href="" class="float-center btn btn-sm btn-info">Add to cart</a>
+										<form action="{{url_for('AddCart')}}" method="post">
+										<input type="hidden" name="product_id" value="{{product.id}}">
+										<input type="hidden" name="quantity" id="" value="1" min="1">
+										<button type="submit" class="float-center btn btn-sm btn-info">Add to cart</button>
+										</form>
 									</div>
 								</div>
 							</div>

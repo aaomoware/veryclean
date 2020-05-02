@@ -21,7 +21,7 @@ def AddCart():
         if product_id and quantity and request.method == 'POST':
             product_price = str(Decimal(product.price))
             DictItems = {product_id: {'name': product.name, 'price': product_price, 'discount': product.discount, 
-            'quantify': quantity, 'image': product.image_1}}
+            'quantity': quantity, 'image': product.image_1}}
 
             if 'Shoppingcart' in session:
                 print(session['Shoppingcart'])
@@ -44,6 +44,7 @@ def AddCart():
 def get_carts():
     if 'Shoppingcart' not in session:
         return redirect(request.referrer)
+    tax = 0
     subtotal = 0
     grandtotal = 0
     totaldiscount = 0
@@ -51,9 +52,51 @@ def get_carts():
     for key, product in session['Shoppingcart'].items():
         discount = (product['discount']/100 * float(product['price']))
         totaldiscount += discount
-        subtotal += float(product['price']) * int(product['quantify'])
-        totalsubtotal += float(product['price']) * int(product['quantify']) 
+        subtotal += float(product['price']) * int(product['quantity'])
+        totalsubtotal += float(product['price']) * int(product['quantity']) 
         subtotal -= discount
         tax = ("%.2f" % (.06 * float(subtotal)))
         grandtotal = float("%.2f" % (1.06 * subtotal))
     return render_template('products/cart.html', tax=tax, grandtotal=grandtotal, totaldiscount=totaldiscount, subtotal=subtotal)
+
+
+@app.route('/empty')
+def empty_cart():
+    try:
+        session.clear()
+        return redirect(url_for('home'))
+    except Exception as e:
+        print(e)
+
+
+@app.route('/updatecart/<int:code>', methods=['POST'])
+def updatecart(code):
+    if 'Shoppingcart' not in session and len(session['Shoppingcart']) <= 0:
+        return redirect(url_for('home'))
+    if request.method == "POST":
+        quantity = request.form.get('quantity')
+        try:
+            session.modified = True
+            for key, item in session['Shoppingcart'].items():
+                if int(key) == code:
+                    item['quantity'] = quantity
+                    flash(f'Product has been updated successfully')
+                    return redirect(url_for('get_carts'))
+        except Exception as e:
+            print(e)
+            return redirect(url_for('get_carts'))
+        
+
+@app.route('/deleteitem/<int:id>')
+def deleteitem(id):
+    if 'Shoppingcart' not in session and len(session['Shoppingcart']) <= 0:
+        return redirect(url_for('home'))
+    try:
+        session.modified = True
+        for key, item in session['Shoppingcart'].items():
+            if int(key) == id:
+                session['Shoppingcart'].pop(key, None)
+                return redirect(url_for('get_carts'))
+    except Exception as e:
+        print(e)
+        return redirect(url_for('get_carts'))
