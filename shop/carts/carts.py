@@ -60,19 +60,52 @@ def get_carts():
     return render_template('products/cart.html', tax=tax, grandtotal=grandtotal, totaldiscount=totaldiscount, subtotal=subtotal)
 
 
-@app.route('/empty')
-def empty_cart():
-    try:
-        session.clear()
-        return redirect(url_for('home'))
-    except Exception as e:
-        print(e)
+@app.route('/clearcart', methods=['POST'])
+def clearcart():
+    if request.method == 'POST':
+        try:
+            session.pop('Shoppingcart', None)
+            return redirect(url_for('shop'))
+        except Exception as e:
+            print(e)
 
+
+
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    if 'Shoppingcart' not in session:
+        return redirect(request.referrer)
+    if request.method == 'POST':
+        tax = 0
+        subtotal = 0
+        grandtotal = 0
+        totaldiscount = 0
+        totalsubtotal = 0
+        for key, product in session['Shoppingcart'].items():
+            discount = (product['discount']/100 * float(product['price']))
+            totaldiscount += discount
+            subtotal += float(product['price']) * int(product['quantity'])
+            totalsubtotal += float(product['price']) * int(product['quantity']) 
+            subtotal -= discount
+            tax = ("%.2f" % (.06 * float(subtotal)))
+            grandtotal = float("%.2f" % (1.06 * subtotal))
+        return render_template('products/checkout.html', tax=tax, grandtotal=grandtotal, totaldiscount=totaldiscount, subtotal=subtotal)
+    else:
+        return redirect(url_for('shop'))
+
+
+
+@app.route('/placeorder', methods=['POST'])
+def placeorder():
+    if request.method == 'POST':
+        return render_template('products/order_complete.html')
+    else:
+        return redirect(url_for('shop'))
 
 @app.route('/updatecart/<int:code>', methods=['POST'])
 def updatecart(code):
     if 'Shoppingcart' not in session and len(session['Shoppingcart']) <= 0:
-        return redirect(url_for('home'))
+        return redirect(url_for('shop'))
     if request.method == "POST":
         quantity = request.form.get('quantity')
         try:
@@ -90,7 +123,7 @@ def updatecart(code):
 @app.route('/deleteitem/<int:id>')
 def deleteitem(id):
     if 'Shoppingcart' not in session and len(session['Shoppingcart']) <= 0:
-        return redirect(url_for('home'))
+        return redirect(url_for('shop'))
     try:
         session.modified = True
         for key, item in session['Shoppingcart'].items():

@@ -110,13 +110,19 @@
 						<div class="total-wrap">
 							<div class="row">
 								<div class="col-sm-8">
-									<form action="#">
+									<form action="{{url_for('checkout')}}" method="post">
 										<div class="row form-group">
-											<div class="col-sm-9">
-												<input type="text" name="quantity" class="form-control input-number" placeholder="Your Coupon Number...">
-											</div>
 											<div class="col-sm-3">
-												<input type="submit" value="Apply Coupon" class="btn btn-primary">
+												<input type="submit" value="Checkout" class="btn btn-primary">
+											</div>
+										</div>
+									</form>
+								</div>
+								<div class="col-sm-8">
+									<form action="{{url_for('clearcart')}}" method="post">
+										<div class="row form-group">
+											<div class="col-sm-3">
+												<input type="submit" value="Clear Cart" class="btn btn-primary">
 											</div>
 										</div>
 									</form>
