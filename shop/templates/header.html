@@ -91,7 +91,7 @@
 								<li><a href="{{url_for('about')}}">About</a></li>
 								<li><a href="{{url_for('contactus')}}">Contact</a></li>
 								{% endif %}
-								<li class="cart"><a href="{{url_for('get_carts')}}"><i class="icon-shopping-cart"></i> Cart [{{session['Shoppingcart'] | length}}]</a></li>
+								<li class="cart"><a href="{{url_for('get_carts')}}"><i class="icon-shopping-cart"></i> Cart [{{session['Shoppingcart'] | length}}]</a><a href="{{url_for('customer_login')}}">Login</a></li>
 							</ul>
 						</div>
 					</div>

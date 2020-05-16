@@ -18,7 +18,7 @@ def AddCart():
         product_id = request.form.get('product_id')
         product = Addproduct.query.filter_by(id=product_id).first()
         
-        if product_id and quantity and request.method == 'POST':
+        if request.method == 'POST':
             product_price = str(Decimal(product.price))
             DictItems = {product_id: {'name': product.name, 'price': product_price, 'discount': product.discount, 
             'quantity': quantity, 'image': product.image_1}}
@@ -26,7 +26,10 @@ def AddCart():
             if 'Shoppingcart' in session:
                 print(session['Shoppingcart'])
                 if product_id in session['Shoppingcart']:
-                    print('The product is already in your cart')
+                    for key, item in session['Shoppingcart'].items():
+                        if int(key) == int(product_id):
+                            session.modified = True
+                            item['quantity'] = int(item['quantity']) + 1
                 else:
                     session['Shoppingcart'] = MergeDicts(session['Shoppingcart'], DictItems)
                     return redirect(request.referrer)
@@ -97,10 +100,25 @@ def checkout():
 
 @app.route('/placeorder', methods=['POST'])
 def placeorder():
-    if request.method == 'POST':
-        return render_template('products/order_complete.html')
-    else:
+    try:
+        if request.method == 'POST':
+            country = request.form.get('country')
+            address1 = request.form.get('address1')
+            address2 = request.form.get('address2')
+            province = request.form.get('province')
+            lastname = request.form.get('lastname')
+            firstname = request.form.get('firstname')
+            company_name = request.form.get('company_name')
+            zippostalcode = request.form.get('zippostalcode')
+            createaccount = request.form.get('createaccount')
+            onlyfordelivery = request.form.get('onlyfordelivery')            
+            return render_template('products/order_complete.html')
+        else:
+            return redirect(url_for('shop'))
+    except Exception as e:
+        print(e)
         return redirect(url_for('shop'))
+
 
 @app.route('/updatecart/<int:code>', methods=['POST'])
 def updatecart(code):
