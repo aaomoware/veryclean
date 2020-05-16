@@ -1,0 +1,120 @@
+{% include 'header.html' %}
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<p class="bread"><span><a href="{{url_for('home')}}">Home</a></span> / <span>Register</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="colorlib-product">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8">
+						<form action="{{url_for('customer_register')}}" method="post" class="colorlib-form">>
+							<h2>Customer Registration</h2>
+		              	<div class="row">
+			               <div class="col-md-12">
+			                  <div class="form-group">
+			                  	<label for="country">Select Country</label>
+			                     <div class="form-field">
+			                     	<i class="icon icon-arrow-down3"></i>
+			                        <select name="people" id="people" class="form-control">
+				                      	<option value="">Select country</option>
+				                        <option value="#">Poland</option>
+				                        <option value="#">Netherlands</option>
+			                        </select>
+			                     </div>
+			                  </div>
+			               </div>
+
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="fname">First Name</label>
+										<input type="text" id="fname" name="firstname" class="form-control" placeholder="Your firstname" required>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="lname">Last Name</label>
+										<input type="text" id="lname" name="lastname" class="form-control" placeholder="Your lastname" required>
+									</div>
+								</div>
+
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="companyname">Company Name</label>
+			                    	<input type="text" id="companyname" name="companyname" class="form-control" placeholder="Company Name">
+			                  </div>
+			               </div>
+
+			               <div class="col-md-12">
+									<div class="form-group">
+										<label for="fname">Address</label>
+			                    	<input type="text" id="address" name="address1" class="form-control" placeholder="Enter Your Address" required>
+			                  </div>
+			                  <div class="form-group">
+			                    	<input type="text" id="address2" name="address2" class="form-control" placeholder="Second Address">
+			                  </div>
+			               </div>
+			            
+			               <div class="col-md-12">
+									<div class="form-group">
+										<label for="companyname">Town/City</label>
+			                    	<input type="text" id="towncity" name="towncity" class="form-control" placeholder="Town or City" required>
+			                  </div>
+			               </div>
+			            
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="stateprovince">Province</label>
+										<input type="text" id="province" name="province" class="form-control" placeholder="Province">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="lname">Postal Code</label>
+										<input type="text" id="zippostalcode" name="zippostalcode" class="form-control" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}" placeholder="Postal" required>
+									</div>
+								</div>
+							
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="email">E-mail Address</label>
+										<input type="email" id="email" name="email" class="form-control" placeholder="State Province" required>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="Phone">Phone Number</label>
+										<input type="tel" id="zippostalcode" name-"phonenumber" class="form-control" placeholder="0031637838456" pattern="{9}" required>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="email">Password</label>
+										<input type="password" id="email" name="password" class="form-control" placeholder="State Province" required>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="Phone">Repeat Password</label>
+										<input type="password" id="zippostalcode" name-"rpassword" class="form-control" placeholder="0031637838456" pattern="{9}" required>
+									</div>
+								</div>
+		               </div>
+						<div class="col-lg-4">
+						<div class="row">
+						<div class="row">
+							<div class="col-md-12 text-center">
+								<p><<button type="submit" class="btn btn-primary">Register</button></p>
+							</div>
+						</div>
+					</div>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+{% include 'footer.html' %}
