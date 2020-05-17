@@ -1,8 +1,10 @@
 from flask import redirect, render_template, flash, request, url_for, session, current_app
+from flask_login import current_user, logout_user, login_user
 from shop import db, app
 import json
 from decimal import Decimal
 from shop.products.models import Addproduct
+from shop.customers.models import Register
 
 def MergeDicts(dict1, dict2):
     if isinstance(dict1, list) and isinstance(dict2, list):
@@ -79,6 +81,12 @@ def checkout():
     if 'Shoppingcart' not in session:
         return redirect(request.referrer)
     if request.method == 'POST':
+        
+        if current_user.is_authenticated:
+            user = True
+        else:
+            user = False
+            
         tax = 0
         subtotal = 0
         grandtotal = 0
@@ -92,7 +100,7 @@ def checkout():
             subtotal -= discount
             tax = ("%.2f" % (.06 * float(subtotal)))
             grandtotal = float("%.2f" % (1.06 * subtotal))
-        return render_template('products/checkout.html', tax=tax, grandtotal=grandtotal, totaldiscount=totaldiscount, subtotal=subtotal)
+        return render_template('products/checkout.html', tax=tax, grandtotal=grandtotal, totaldiscount=totaldiscount, subtotal=subtotal, user=user)
     else:
         return redirect(url_for('shop'))
 

@@ -1,7 +1,7 @@
 from flask import redirect, render_template, flash, request, url_for, session, current_app
 from flask_login import login_required, current_user, logout_user, login_user
 from shop import db, app, photos, bcrypt, login_manager
-from .models import Register
+from .models import Register, CustomerOrder
 import secrets, os
 
 @app.route('/customer/register',  methods=['GET', 'POST'])
@@ -48,7 +48,29 @@ def customerLogin():
         flash(f'Invalid email or password', 'danger')
         return redirect(url_for('customerLogin'))
 
+
 @app.route('/customer/logout')
 def customerLogout():
     logout_user()
     return redirect(url_for('shop'))
+
+
+@app.route('/getorder', methods=['POST'])
+@login_required
+def get_order():
+    if request.method == 'GET':
+        return redirect(url_for('shop'))
+    if current_user.is_authenticated:
+        customer_id = current_user.id
+        invoice = secrets.token_hex(5)
+        try:
+            order = CustomerOrder(
+                invoice = invoice,
+                customer_id = customer_id,
+                orders = session['ShoppingCart'])
+            db.session.add(order)
+            return redirect(url_for('shop'))
+        except Exception as e:
+            print(e)
+            flash('Something went wrong while getting orders', 'danger')
+            return redirect(url_for('get_carts'))
