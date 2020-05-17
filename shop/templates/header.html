@@ -91,7 +91,11 @@
 								<li><a href="{{url_for('about')}}">About</a></li>
 								<li><a href="{{url_for('contactus')}}">Contact</a></li>
 								{% endif %}
-								<li class="cart"><a href="{{url_for('get_carts')}}"><i class="icon-shopping-cart"></i> Cart [{{session['Shoppingcart'] | length}}]</a><a href="{{url_for('customer_login')}}">Login</a></li>
+								{% if current_user.is_authenticated %}
+								<li class="cart"><a href="{{url_for('get_carts')}}"><i class="icon-shopping-cart"></i> Cart [{{session['Shoppingcart'] | length}}]</a><a href="{{url_for('customerLogout')}}">{{current_user.firstname}} | Logout</a></li>
+								{% else %}
+								<li class="cart"><a href="{{url_for('get_carts')}}"><i class="icon-shopping-cart"></i> Cart [{{session['Shoppingcart'] | length}}]</a><a href="{{url_for('customerLogin')}}">Login</a></li>
+								{% endif %}
 							</ul>
 						</div>
 					</div>

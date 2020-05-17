@@ -20,7 +20,7 @@
 			                  	<label for="country">Select Country</label>
 			                     <div class="form-field">
 			                     	<i class="icon icon-arrow-down3"></i>
-			                        <select name="people" id="people" class="form-control">
+			                        <select name="country" id="country" class="form-control">
 				                      	<option value="">Select country</option>
 				                        <option value="#">Poland</option>
 				                        <option value="#">Netherlands</option>
@@ -75,7 +75,7 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="lname">Postal Code</label>
-										<input type="text" id="zippostalcode" name="zippostalcode" class="form-control" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}" placeholder="Postal" required>
+										<input type="text" id="zippostalcode" name="zippostalcode" class="form-control" pattern="[1-9][0-9]{3}\s?[a-zA-Z]{2}" placeholder="Postal Code" required>
 									</div>
 								</div>
 							
@@ -87,20 +87,20 @@
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="Phone">Phone Number</label>
-										<input type="tel" id="zippostalcode" name-"phonenumber" class="form-control" placeholder="0031637838456" pattern="{9}" required>
+										<label for="phonenumber">Phone Number</label>
+										<input type="tel" id="phonenumber" name="phonenumber" class="form-control" placeholder="0031637838456" pattern="(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)" required>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="email">Password</label>
-										<input type="password" id="email" name="password" class="form-control" placeholder="State Province" required>
+										<label for="password">Password</label>
+										<input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="Phone">Repeat Password</label>
-										<input type="password" id="zippostalcode" name-"rpassword" class="form-control" placeholder="0031637838456" pattern="{9}" required>
+										<label for="passowrd">Repeat Password</label>
+										<input type="password" id="rpassword" name="rpassword" class="form-control" placeholder="Repeat Password" required>
 									</div>
 								</div>
 		               </div>
@@ -108,7 +108,7 @@
 						<div class="row">
 						<div class="row">
 							<div class="col-md-12 text-center">
-								<p><<button type="submit" class="btn btn-primary">Register</button></p>
+								<p><button type="submit" class="btn btn-primary">Register</button></p>
 							</div>
 						</div>
 					</div>
