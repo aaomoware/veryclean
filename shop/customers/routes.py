@@ -67,9 +67,11 @@ def get_order():
             order = CustomerOrder(
                 invoice = invoice,
                 customer_id = customer_id,
-                orders = session['ShoppingCart'])
+                orders = session['Shoppingcart'])
             db.session.add(order)
-            return redirect(url_for('shop'))
+            db.session.commit()
+            session.pop('Shoppingcart')
+            return render_template('customer/order_complete.html')
         except Exception as e:
             print(e)
             flash('Something went wrong while getting orders', 'danger')

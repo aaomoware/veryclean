@@ -48,7 +48,7 @@ def AddCart():
 @app.route('/carts')
 def get_carts():
     if 'Shoppingcart' not in session:
-        return redirect(request.referrer)
+        return redirect(url_for('shop'))
     tax = 0
     subtotal = 0
     grandtotal = 0
