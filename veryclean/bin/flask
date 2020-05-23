@@ -1,4 +1,4 @@
-#!/Users/aomowa/Documents/git-repos/mine/veryclean/veryclean/bin/python3.7
+#!/home/ec2-user/veryclean/veryclean/bin/python3.7
 # -*- coding: utf-8 -*-
 import re
 import sys
