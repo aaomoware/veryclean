@@ -1,0 +1,106 @@
+{% include 'header.html' %}
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<p class="bread"><span><a href="{{url_for('home')}}">Home</a></span> / <span>Customer Invoice</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="colorlib-product">
+			<div class="container">
+				<div class="row row-pb-lg">
+					<div class="col-md-12">
+						<div class="product-name d-flex">
+							<div class="one-forth text-left px-4">
+								<span>Product Details</span>
+							</div>
+							<div class="one-eight text-center">
+								<span>Price</span>
+							</div>
+							<div class="one-eight text-center">
+								<span>Discount</span>
+							</div>
+							<div class="one-eight text-center">
+								<span>Quantity</span>
+							</div>
+							<div class="one-eight text-center">
+								<span>Total</span>
+							</div>
+						</div>
+						{% for key, product in orders.orders.items() %}
+						
+						{% set discount = "%0.2f" |format((product.discount/100) * product.price|float) %}
+						<div class="product-cart d-flex">
+							<div class="one-forth">
+								<div class="display-tc">
+									<h3>{{product.name}}</h3>
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<span class="price">€{{product.price}}</span>
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+								{% if product.discount > 0 %}
+									<span class="discount">{{product.discount}}% is €{{discount}}</span>
+								{% else %}
+									<span class="discount"></span>
+								{% endif %}
+								</div>
+							</div>
+							<div class="one-eight text-center">
+								<div class="display-tc">
+                                    <span class="quantity">{{product.quantity}}</span>
+								</div>
+							</div>
+							{% set subtotal = product.quantity|int * product.price|float %}
+							<div class="one-eight text-center">
+								<div class="display-tc">
+									<span class="price">€{{"%0.2f"|format((subtotal|float) - discount|float)}}</span>
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+				<div class="row row-pb-lg">
+					<div class="col-md-12">
+						<div class="total-wrap">
+							<div class="row">
+								<div class="col-sm-4 text-center">
+									<div class="total">
+										<div class="sub">
+											<p><span>Order Status:</span> <span>{{orders.status}}</span></p>
+											<p><span>Ordeer Invoice:</span> <span>{{orders.invoice}}</span></p>
+											<p><span>Customer Name:</span> <span>{{customer.firstname}} {{customer.lastname}}</span></p>
+											<p><span>Customer Number:</span> <span>{{customer.phonenumber}}</span></p>
+										</div>
+									</div>
+									<div class="total">
+										<div class="sub">
+											<p><span>Subtotal:</span> <span>€{{subtotal}}</span></p>
+											<p><span>Taxation:</span> <span>€{{tax}}</span></p>
+											<p><span>Delivery:</span> <span>€0.00</span></p>
+											<p><span>Discount:</span> <span>€{{discount}}</span></p>
+										</div>
+										<div class="grand-total">
+											<p><span><strong>Total:</strong></span> <span>€{{grandtotal}}</span></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+						<div class="row form-group">
+							<div class="col-sm-3">
+								<input type="submit" value="Dowload Invoice" class="btn btn-primary">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+{% include 'footer.html' %}

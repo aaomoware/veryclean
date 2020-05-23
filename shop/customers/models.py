@@ -24,19 +24,17 @@ class Register(db.Model, UserMixin):
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     
     def __repr__(self):
-        return '<Register %r>' % self.name
+        return '<Register %r>' % self.firstname
 
 
-class JsonEncodedDict(db.TypeDecorator):
+class JsonEcodedDict(db.TypeDecorator):
     impl = db.Text
-    
     def process_bind_param(self, value, dialect):
         if value is None:
             return '{}'
         else:
             return json.dumps(value)
-    
-    def process_result_param(self, value, dialect):
+    def process_result_value(self, value, dialect):
         if value is None:
             return {}
         else:
@@ -49,11 +47,12 @@ class CustomerOrder(db.Model):
     status = db.Column(db.String(20), default='Pending', nullable=False)
     customer_id = db.Column(db.Integer, unique=False, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    orders = db.Column(JsonEncodedDict)
-    
+    orders = db.Column(JsonEcodedDict)
+
     def __repr__(self):
-        return '<CustomerOrder %r>' % self.invoice
+        return'<CustomerOrder %r>' % self.invoice
 
 
 db.create_all()
     
+

@@ -4,7 +4,6 @@ from shop import db, app
 import json
 from decimal import Decimal
 from shop.products.models import Addproduct
-from shop.customers.models import Register
 
 def MergeDicts(dict1, dict2):
     if isinstance(dict1, list) and isinstance(dict2, list):
