@@ -104,7 +104,7 @@ def get_order():
                 
                 session.pop('Shoppingcart')
                 return redirect(payment.checkout_url)
-            return redirect(url_for('carts'))
+#            return redirect(url_for('carts'))
             #return render_template('products/order_complete.html', data=data)
             #return redirect(url_for('orders',invoice=invoice))
             
