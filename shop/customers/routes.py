@@ -4,8 +4,6 @@ from shop import db, app, photos, bcrypt, login_manager, cal_cart_total
 from .models import Register, CustomerOrder, Payments
 import secrets, os, json, pdfkit
 from mollie.api.client import Client
-from pprint import pprint
-
 
 
 @app.route('/customer/register',  methods=['GET', 'POST'])
@@ -67,54 +65,51 @@ def get_order():
     if current_user.is_authenticated:
         customer_id = current_user.id
         invoice = secrets.token_hex(5)
-#        try:
-        mollie_client = Client()
-        mollie_client.set_api_key('test_DH6rG3RrUAQrJGngCPgdzqD8GCE3Kd')
+        try:
+            mollie_client = Client()
+            mollie_client.set_api_key('test_DH6rG3RrUAQrJGngCPgdzqD8GCE3Kd')
             
-        amount = cal_cart_total(session['Shoppingcart'])
+            amount = cal_cart_total(session['Shoppingcart'])
             
-        payment = mollie_client.payments.create({
-            'amount': {
-                'currency': 'EUR',
-                'value': str(amount)
-            },
-            'description': 'Payment for invoice: ' + invoice,
-            'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/orders/' + invoice,
-            'webhookUrl': 'https://verclean-531794983.eu-west-1.elb.amazonaws.com/mollie-webhook/',
-            'metadata': {
-                'invoice': str(invoice)
-            }
-        })
+            payment = mollie_client.payments.create({
+                'amount': {
+                    'currency': 'EUR',
+                    'value': str(amount)
+                },
+                'description': 'Payment for invoice: ' + invoice,
+                'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/orders/' + invoice,
+                'webhookUrl': 'https://verclean-531794983.eu-west-1.elb.amazonaws.com/mollie-webhook/',
+                'metadata': {
+                    'invoice': str(invoice)
+                }
+            })
         
-        if payment.status == 'open':
-            payments = Payments(
-                status = payment.status,
-                amount = amount,
-                invoice = invoice,
-                payment_id = payment.id
-            )
-        
-            order = CustomerOrder(
-                invoice = invoice,
-                customer_id = customer_id,
-                orders = session['Shoppingcart']
-            )
+            if payment.status == 'open':
+                payments = Payments(
+                    status = payment.status,
+                    amount = amount,
+                    invoice = invoice,
+                    payment_id = payment.id
+                )
             
-            db.session.add(payments)
-            db.session.add(order)
-            db.session.commit()
-            
-            session.pop('Shoppingcart')
-            return redirect(payment.checkout_url)
-       #     return redirect(payment.checkout_url)
-        return redirect(url_for('carts'))
-            #return render_template('products/order_complete.html', data=data)
-            #return redirect(url_for('orders',invoice=invoice))
-            
-        #except Exception as e:
-        #    print(e)
-        #    flash('Something went wrong while getting orders', 'danger')
-        #    return redirect(url_for('get_carts'))
+                order = CustomerOrder(
+                    invoice = invoice,
+                    customer_id = customer_id,
+                    orders = session['Shoppingcart']
+                )
+                
+                db.session.add(payments)
+                db.session.add(order)
+                db.session.commit()
+                
+                session.pop('Shoppingcart')
+                return redirect(payment.checkout_url)
+            return redirect(url_for('carts'))
+                    
+        except Exception as e:
+            print(e)
+            flash('Something went wrong while getting orders', 'danger')
+            return redirect(url_for('get_carts'))
 
 @app.route('/orders/<invoice>')
 @login_required
@@ -169,3 +164,22 @@ def get_pdf(invoice):
             response.headers['Content-Disposition']='inline: filename='+ invoice +'.pdf'
             return response
         return request(url_for('orders'))
+
+
+@app.route('/ordercomplete/<invoice>', methods=['POST'])
+def ordercomplete(invoice):
+    try:
+        mollie_client = Client()
+        mollie_client.set_api_key('test_DH6rG3RrUAQrJGngCPgdzqD8GCE3Kd')
+        
+        invoice_payment = Payments.query.filter_by(invoice=invoice).first()
+        payment = mollie_client.payments.get(invoice_payment.payment_id)
+        
+        if payment.is_paid():
+            invoice_payment.status = payment.status
+            db.session.commit()
+            return render_template('customer/order_complete.html')
+
+    except Exception as e:
+        print(e)
+    
