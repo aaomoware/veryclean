@@ -68,11 +68,13 @@ def get_order():
         try:
             mollie_client = Client()
             mollie_client.set_api_key('test_DH6rG3RrUAQrJGngCPgdzqD8GCE3Kd')
+        
+            amount = cal_cart_total(session['Shoppingcart'])
             
             payment = mollie_client.payments.create({
                 'amount': {
                     'currency': 'EUR',
-                    'value': cal_cart_total(session['Shoppingcart']) 
+                    'value': amount
                 },
                 'description': 'Payment for invoice: ' + invoice,
                 'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/orders/' + invoice,
@@ -85,7 +87,7 @@ def get_order():
             if payment.status == 'open':
                 payment = Payments(
                     status = payment.status,
-                    amount = cal_cart_total(session['Shoppingcart']),
+                    amount = amount,
                     invoice = invoice,
                     payment_id = payment.id
                 )
@@ -102,8 +104,8 @@ def get_order():
                 
                 session.pop('Shoppingcart')
                 return redirect(payment.checkout_url)
-            #return redirect(url_for('carts'))
-            return render_template('products/order_complete.html', data=payment.status)
+            return redirect(url_for('carts'))
+            #return render_template('products/order_complete.html', data=data)
             #return redirect(url_for('orders',invoice=invoice))
             
         except Exception as e:
