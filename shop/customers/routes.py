@@ -1,7 +1,7 @@
 from flask import redirect, render_template, flash, request, url_for, session, current_app, make_response
 from flask_login import login_required, current_user, logout_user, login_user
-from shop import db, app, photos, bcrypt, login_manager
-from .models import Register, CustomerOrder
+from shop import db, app, photos, bcrypt, login_manager, cal_cart_total
+from .models import Register, CustomerOrder, Payments
 import secrets, os, json, pdfkit
 from mollie.api.client import Client
 
@@ -72,7 +72,7 @@ def get_order():
             payment = mollie_client.payments.create({
                 'amount': {
                     'currency': 'EUR',
-                    'value': '10.00' 
+                    'value': cal_cart_total(session['Shoppingcart']) 
                 },
                 'description': 'Payment for invoice: ' + invoice,
                 'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/orders/' + invoice,
@@ -81,19 +81,31 @@ def get_order():
                     'invoice': str(invoice)
                 }
             })
-            data = {'status': payment.status}
-            print(data)
+        
+            if payment.status == 'Open':
+                payment = Payments(
+                    status = payment.status,
+                    amount = cal_cart_total(session['Shoppingcart']),
+                    invoice = invoice,
+                    payment_id = payment.id
+                )
             
-            order = CustomerOrder(
-                invoice = invoice,
-                customer_id = customer_id,
-                orders = session['Shoppingcart'])
-            db.session.add(order)
-            db.session.commit()
-            session.pop('Shoppingcart')
-            return redirect(payment.checkout_url)
+                order = CustomerOrder(
+                    invoice = invoice,
+                    customer_id = customer_id,
+                    orders = session['Shoppingcart']
+                )
+                
+                db.session.add(payment)
+                db.session.add(order)
+                db.session.commit()
+                
+                session.pop('Shoppingcart')
+                return redirect(payment.checkout_url)
+            return redirect(url_for('carts'))
             #return render_template('products/order_complete.html', data=data)
             #return redirect(url_for('orders',invoice=invoice))
+            
         except Exception as e:
             print(e)
             flash('Something went wrong while getting orders', 'danger')

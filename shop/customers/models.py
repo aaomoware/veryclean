@@ -53,6 +53,14 @@ class CustomerOrder(db.Model):
         return'<CustomerOrder %r>' % self.invoice
 
 
+class Payments(db.Model):
+    status = db.Column(db.String(10), nullable=False)
+    amount = db.Column(db.Numeric(10,2), nullable=False)
+    invoice = db.Column(db.String(20), primary_key=True)
+    payment_id = db.Column(db.String(100), unique=True, nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+
 db.create_all()
     
 

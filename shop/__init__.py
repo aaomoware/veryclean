@@ -18,6 +18,41 @@ patch_request_class(app)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
+def cal_cart(orders):
+    tax = 0
+    subtotal = 0
+    grandtotal = 0
+    totaldiscount = 0
+    totalsubtotal = 0
+    
+    for key, product in orders.items():
+        discount = (product['discount']/100 * float(product['price']))
+        totaldiscount += discount
+        subtotal += float(product['price']) * int(product['quantity'])
+        totalsubtotal += float(product['price']) * int(product['quantity']) 
+        subtotal -= discount
+        tax = ("%.2f" % (.21 * float(subtotal)))
+        grandtotal = float("%.2f" % (1.06 * subtotal))
+    return totalsubtotal, grandtotal, totaldiscount, subtotal, tax
+
+def cal_cart_total(orders):
+    tax = 0
+    subtotal = 0
+    grandtotal = 0
+    totaldiscount = 0
+    totalsubtotal = 0
+    
+    for key, product in orders.items():
+        discount = (product['discount']/100 * float(product['price']))
+        totaldiscount += discount
+        subtotal += float(product['price']) * int(product['quantity'])
+        totalsubtotal += float(product['price']) * int(product['quantity']) 
+        subtotal -= discount
+        tax = ("%.2f" % (.21 * float(subtotal)))
+        grandtotal = float("%.2f" % (1.06 * subtotal))
+    return grandtotal
+        
+        
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view='customerLogin'
