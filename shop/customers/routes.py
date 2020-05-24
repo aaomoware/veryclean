@@ -71,41 +71,41 @@ def get_order():
         
         amount = cal_cart_total(session['Shoppingcart'])
             
-        #payment = mollie_client.payments.create({
-        #    'amount': {
-        #        'currency': 'EUR',
-        #        'value': amount
-        #    },
-        #    'description': 'Payment for invoice: ' + invoice,
-        #    'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/orders/' + invoice,
-        #    'webhookUrl': 'https://verclean-531794983.eu-west-1.elb.amazonaws.com/mollie-webhook/',
-        #    'metadata': {
-        #        'invoice': str(invoice)
-        #    }
-        #})
+        payment = mollie_client.payments.create({
+            'amount': {
+                'currency': 'EUR',
+                'value': str(amount)
+            },
+            'description': 'Payment for invoice: ' + invoice,
+            'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/orders/' + invoice,
+            'webhookUrl': 'https://verclean-531794983.eu-west-1.elb.amazonaws.com/mollie-webhook/',
+            'metadata': {
+                'invoice': str(invoice)
+            }
+        })
         
-        #if payment.status == 'open':
-        #    payment = Payments(
-        #        status = payment.status,
-        #        amount = amount,
-        #        invoice = invoice,
-        #        payment_id = payment.id
-        #    )
-        #
-        #    order = CustomerOrder(
-        #        invoice = invoice,
-        #        customer_id = customer_id,
-        #        orders = session['Shoppingcart']
-        #    )
-        #    
-        #    db.session.add(payment)
-        #    db.session.add(order)
-        #    db.session.commit()
-        #    
-        #    session.pop('Shoppingcart')
-            #return redirect(payment.checkout_url)
-        #return redirect(url_for('carts'))
-        return render_template('products/order_complete.html', data=amount)
+        if payment.status == 'open':
+            payment = Payments(
+                status = payment.status,
+                amount = amount,
+                invoice = invoice,
+                payment_id = payment.id
+            )
+        
+            order = CustomerOrder(
+                invoice = invoice,
+                customer_id = customer_id,
+                orders = session['Shoppingcart']
+            )
+            
+            db.session.add(payment)
+            db.session.add(order)
+            db.session.commit()
+            
+            session.pop('Shoppingcart')
+            return redirect(payment.checkout_url)
+        return redirect(url_for('carts'))
+        #return render_template('products/order_complete.html', data=amount)
         #return redirect(url_for('orders',invoice=invoice))
             
         #except Exception as e:
