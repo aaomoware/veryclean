@@ -3,6 +3,8 @@ from flask_login import login_required, current_user, logout_user, login_user
 from shop import db, app, photos, bcrypt, login_manager
 from .models import Register, CustomerOrder
 import secrets, os, json, pdfkit
+from mollie.api.client import Client
+
 
 @app.route('/customer/register',  methods=['GET', 'POST'])
 def customer_register():
@@ -64,6 +66,24 @@ def get_order():
         customer_id = current_user.id
         invoice = secrets.token_hex(5)
         try:
+            mollie_client = Client()
+            mollie_client.set_api_key('test_DH6rG3RrUAQrJGngCPgdzqD8GCE3Kd')
+            
+            payment = mollie_client.payments.create({
+                'amount': {
+                    'currency': 'EUR',
+                    'value': '10.00' 
+                },
+                'description': 'My first API payment',
+                'redirectUrl': 'https://http://verclean-531794983.eu-west-1.elb.amazonaws.com/order/' + invoice '/',
+                'webhookUrl': 'https://http://verclean-531794983.eu-west-1.elb.amazonaws.com/mollie-webhook/',
+                'metadata': {
+                    'invoice': str(invoice)
+                }
+            })
+            data = {'status': payment.status}
+            print(data)
+            
             order = CustomerOrder(
                 invoice = invoice,
                 customer_id = customer_id,
