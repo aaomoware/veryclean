@@ -70,7 +70,7 @@ def get_order():
         mollie_client.set_api_key('test_DH6rG3RrUAQrJGngCPgdzqD8GCE3Kd')
             
         amount = cal_cart_total(session['Shoppingcart'])
-        return render_template('customer/orders_complete.html', amount=amount)
+        return render_template('customer/order_complete.html', amount=amount)
             
         #payment = mollie_client.payments.create({
         #    'amount': {
