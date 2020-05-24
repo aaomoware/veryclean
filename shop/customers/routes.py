@@ -105,7 +105,7 @@ def get_order():
             db.session.commit()
             
             session.pop('Shoppingcart')
-            return render_template('products/order_complete.html', data=pprint(vars(payment)))
+            return redirect(payment.checkout_url)
        #     return redirect(payment.checkout_url)
         return redirect(url_for('carts'))
             #return render_template('products/order_complete.html', data=data)
