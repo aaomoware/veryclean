@@ -82,7 +82,7 @@ def get_order():
                 }
             })
         
-            if payment.status == 'Open':
+            if payment.status == 'open':
                 payment = Payments(
                     status = payment.status,
                     amount = cal_cart_total(session['Shoppingcart']),
