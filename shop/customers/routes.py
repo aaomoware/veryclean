@@ -91,7 +91,8 @@ def get_order():
             db.session.add(order)
             db.session.commit()
             session.pop('Shoppingcart')
-            return render_template('products/order_complete.html', data=data)
+            return redirect(payment.checkout_url)
+            #return render_template('products/order_complete.html', data=data)
             #return redirect(url_for('orders',invoice=invoice))
         except Exception as e:
             print(e)
