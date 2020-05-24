@@ -84,26 +84,26 @@ def get_order():
         #    }
         #})
         
-        if payment.status == 'open':
-            payment = Payments(
-                status = payment.status,
-                amount = amount,
-                invoice = invoice,
-                payment_id = payment.id
-            )
-        
-            order = CustomerOrder(
-                invoice = invoice,
-                customer_id = customer_id,
-                orders = session['Shoppingcart']
-            )
-            
-            db.session.add(payment)
-            db.session.add(order)
-            db.session.commit()
-            
-            session.pop('Shoppingcart')
-            return redirect(payment.checkout_url)
+        #if payment.status == 'open':
+        #    payment = Payments(
+        #        status = payment.status,
+        #        amount = amount,
+        #        invoice = invoice,
+        #        payment_id = payment.id
+        #    )
+        #
+        #    order = CustomerOrder(
+        #        invoice = invoice,
+        #        customer_id = customer_id,
+        #        orders = session['Shoppingcart']
+        #    )
+        #    
+        #    db.session.add(payment)
+        #    db.session.add(order)
+        #    db.session.commit()
+        #    
+        #    session.pop('Shoppingcart')
+            #return redirect(payment.checkout_url)
         #return redirect(url_for('carts'))
         return render_template('products/order_complete.html', data=amount)
         #return redirect(url_for('orders',invoice=invoice))
