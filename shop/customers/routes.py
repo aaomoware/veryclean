@@ -74,8 +74,8 @@ def get_order():
                     'currency': 'EUR',
                     'value': '10.00' 
                 },
-                'description': 'My first API payment',
-                'redirectUrl': 'https://http://verclean-531794983.eu-west-1.elb.amazonaws.com/order/' + invoice + '/',
+                'description': 'Payment for invoice: ' + invoice,
+                'redirectUrl': 'http://http://verclean-531794983.eu-west-1.elb.amazonaws.com/order/' + invoice + '/',
                 'webhookUrl': 'https://http://verclean-531794983.eu-west-1.elb.amazonaws.com/mollie-webhook/',
                 'metadata': {
                     'invoice': str(invoice)
