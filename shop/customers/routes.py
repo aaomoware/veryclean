@@ -70,41 +70,42 @@ def get_order():
         mollie_client.set_api_key('test_DH6rG3RrUAQrJGngCPgdzqD8GCE3Kd')
             
         amount = cal_cart_total(session['Shoppingcart'])
+        return render_template('customer/orders_complete.html', amount=amount)
             
-        payment = mollie_client.payments.create({
-            'amount': {
-                'currency': 'EUR',
-                'value': str(amount)
-            },
-            'description': 'Payment for invoice: ' + invoice,
-            'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/ordercomplete/' + invoice,
-            'webhookUrl': 'https://verclean-531794983.eu-west-1.elb.amazonaws.com/mollie-webhook/',
-            'metadata': {
-                'invoice': str(invoice)
-            }
-        })
+        #payment = mollie_client.payments.create({
+        #    'amount': {
+        #        'currency': 'EUR',
+        #        'value': str(amount)
+        #    },
+        #    'description': 'Payment for invoice: ' + invoice,
+        #    'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/ordercomplete/' + invoice,
+        #    'webhookUrl': 'https://verclean-531794983.eu-west-1.elb.amazonaws.com/mollie-webhook/',
+        #    'metadata': {
+        #        'invoice': str(invoice)
+        #    }
+        #})
         
-        if payment.status == 'open':
-            payments = Payments(
-                status = payment.status,
-                amount = amount,
-                invoice = invoice,
-                payment_id = payment.id
-            )
-            
-            order = CustomerOrder(
-                invoice = invoice,
-                customer_id = customer_id,
-                orders = session['Shoppingcart']
-            )
-                
-            db.session.add(payments)
-            db.session.add(order)
-            db.session.commit()
-                
-            session.pop('Shoppingcart')
-            return redirect(payment.checkout_url)
-        return redirect(url_for('carts'))
+        #if payment.status == 'open':
+        #    payments = Payments(
+        #        status = payment.status,
+        #        amount = amount,
+        #        invoice = invoice,
+        #        payment_id = payment.id
+        #    )
+        #    
+        #    order = CustomerOrder(
+        #        invoice = invoice,
+        #        customer_id = customer_id,
+        #        orders = session['Shoppingcart']
+        #    )
+        #        
+        #    db.session.add(payments)
+        #    db.session.add(order)
+        #    db.session.commit()
+        #        
+        #    session.pop('Shoppingcart')
+        #    return redirect(payment.checkout_url)
+        #return redirect(url_for('carts'))
                     
         #except Exception as e:
         #    print(e)
