@@ -87,7 +87,7 @@ def get_order():
         })
         
         if payment.status == 'open':
-            payment = Payments(
+            payments = Payments(
                 status = payment.status,
                 amount = amount,
                 invoice = invoice,
@@ -100,7 +100,7 @@ def get_order():
                 orders = session['Shoppingcart']
             )
             
-            db.session.add(payment)
+            db.session.add(payments)
             db.session.add(order)
             db.session.commit()
             
