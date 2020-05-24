@@ -71,18 +71,18 @@ def get_order():
         
         amount = cal_cart_total(session['Shoppingcart'])
             
-        payment = mollie_client.payments.create({
-            'amount': {
-                'currency': 'EUR',
-                'value': amount
-            },
-            'description': 'Payment for invoice: ' + invoice,
-            'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/orders/' + invoice,
-            'webhookUrl': 'https://verclean-531794983.eu-west-1.elb.amazonaws.com/mollie-webhook/',
-            'metadata': {
-                'invoice': str(invoice)
-            }
-        })
+        #payment = mollie_client.payments.create({
+        #    'amount': {
+        #        'currency': 'EUR',
+        #        'value': amount
+        #    },
+        #    'description': 'Payment for invoice: ' + invoice,
+        #    'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/orders/' + invoice,
+        #    'webhookUrl': 'https://verclean-531794983.eu-west-1.elb.amazonaws.com/mollie-webhook/',
+        #    'metadata': {
+        #        'invoice': str(invoice)
+        #    }
+        #})
         
         if payment.status == 'open':
             payment = Payments(
@@ -104,8 +104,8 @@ def get_order():
             
             session.pop('Shoppingcart')
             return redirect(payment.checkout_url)
-        return redirect(url_for('carts'))
-        #return render_template('products/order_complete.html', data=data)
+        #return redirect(url_for('carts'))
+        return render_template('products/order_complete.html', data=amount)
         #return redirect(url_for('orders',invoice=invoice))
             
         #except Exception as e:
