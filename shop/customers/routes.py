@@ -166,7 +166,7 @@ def get_pdf(invoice):
         return request(url_for('orders'))
 
 
-@app.route('/ordercomplete/<invoice>', methods=['POST'])
+@app.route('/ordercomplete/<invoice>')
 def ordercomplete(invoice):
     try:
         mollie_client = Client()

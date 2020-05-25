@@ -33,7 +33,13 @@ def cal_cart(orders):
         subtotal -= discount
         tax = ("%.2f" % (.21 * float(subtotal)))
         grandtotal = float("%.2f" % (1.06 * subtotal))
+        
+    amount = str(grandtotal).split(".")
+    if int(amount[1]) < 10:
+        grandtotal = amount[0] + '.' + amount[1] + '0'
+        return totalsubtotal, grandtotal, totaldiscount, subtotal, tax
     return totalsubtotal, grandtotal, totaldiscount, subtotal, tax
+
 
 def cal_cart_total(orders):
     discount = 0
