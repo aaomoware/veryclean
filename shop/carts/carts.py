@@ -138,7 +138,6 @@ def updatecart(code):
             for key, item in session['Shoppingcart'].items():
                 if int(key) == code:
                     item['quantity'] = quantity
-                    flash(f'Product has been updated successfully')
                     return redirect(url_for('get_carts'))
         except Exception as e:
             print(e)
