@@ -92,7 +92,7 @@
 								<li><a href="{{url_for('contactus')}}">Contact</a></li>
 								{% endif %}
 								{% if current_user.is_authenticated %}
-								<li class="cart"><a href="{{url_for('get_carts')}}"><i class="icon-shopping-cart"></i> Cart [{{session['Shoppingcart'] | length}}]</a> | {{current_user.firstname}} |<a href="{{url_for('customerLogout')}}">Logout</a></li>
+								<li class="cart"><a href="{{url_for('get_carts')}}"><i class="icon-shopping-cart"></i> Cart [{{session['Shoppingcart'] | length}}]</a> | {{current_user.firstname}} | <a href="{{url_for('customerLogout')}}">Logout</a></li>
 								{% else %}
 								<li class="cart"><a href="{{url_for('get_carts')}}"><i class="icon-shopping-cart"></i> Cart [{{session['Shoppingcart'] | length}}]</a><a href="{{url_for('customerLogin')}}">Login</a></li>
 								{% endif %}
