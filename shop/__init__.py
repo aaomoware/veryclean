@@ -23,22 +23,29 @@ def cal_cart(orders):
     subtotal = 0
     grandtotal = 0
     totaldiscount = 0
-    totalsubtotal = 0
     
     for key, product in orders.items():
         discount = (product['discount']/100 * float(product['price']))
         totaldiscount += discount
         subtotal += float(product['price']) * int(product['quantity'])
-        totalsubtotal += float(product['price']) * int(product['quantity']) 
         subtotal -= discount
         tax = ("%.2f" % (.21 * float(subtotal)))
         grandtotal = float("%.2f" % (1.06 * subtotal))
-        
+
+    amount = str(tax).split(".")
+    if int(amount[1]) < 10:
+        tax = amount[0] + '.' + amount[1] + '0'  
+    amount = str(subtotal).split(".")
+    if int(amount[1]) < 10:
+        subtotal = amount[0] + '.' + amount[1] + '0'
     amount = str(grandtotal).split(".")
     if int(amount[1]) < 10:
         grandtotal = amount[0] + '.' + amount[1] + '0'
-        return totalsubtotal, grandtotal, totaldiscount, subtotal, tax
-    return totalsubtotal, grandtotal, totaldiscount, subtotal, tax
+    amount = str(totaldiscount).split(".")
+    if int(amount[1]) < 10:
+        totaldiscount = amount[0] + '.' + amount[1] + '0' 
+    
+    return tax, subtotal, grandtotal, totaldiscount
 
 
 def cal_cart_total(orders):
@@ -67,5 +74,5 @@ login_manager.login_message = u"Please login first"
 
 from shop.admin import routes
 from shop.products import routes
-from shop.carts import carts
+from shop.carts import routes
 from shop.customers import routes
