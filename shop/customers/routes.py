@@ -192,7 +192,8 @@ def contact():
            
         firstname = request.form['firstname']
         msg = Message(str(request.form['subject']),
-                      sender=str(request.form['email']),
+                      sender=str(app.config.get("MAIL_USERNAME")),
+                      reply_to=str(request.form['email']),
                       recipients=[str(request.form['email'])])
         msg.html = "Message from " + firstname + ",<br><br><p>" + request.form['message'] + "</p><br><br>"
         mail.send(msg)
