@@ -184,7 +184,7 @@ def ordercomplete(invoice):
         print(e)
 
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact(): 
     if request.method == 'GET':
         return redirect(url_for('contactus'))
