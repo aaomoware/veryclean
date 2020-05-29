@@ -191,7 +191,7 @@ def contact():
     if request.method == 'POST': 
            
         firstname = request.form['firstname']
-        #body = "Mr/Mr " + request.form['firstname'] + firstname + "," + "<br/>" + request.form['message'] + request.form['email']  
+        body = "Mr/Mr " + request.form['firstname'] + firstname + "," + "<br/>" + request.form['message'] + request.form['email']  
         #msg = Message(subject=str(request.form['subject']),
         #              sender=str(app.config.get("MAIL_USERNAME")),
         #              reply_to=str(request.form['email']),
@@ -200,7 +200,8 @@ def contact():
         msg = Message(str(request.form['subject']),
                       sender=str(app.config.get("MAIL_USERNAME")),
                       reply_to=str([app.config.get("RECIPIENT")]),
-                      recipients=[str(request.form['email'])])
+                      recipients=[str(request.form['email'])],
+                      body=str(body))
         mail.send(msg)
         flash(f'Hi {firstname},  thank you for getting in touch with us.', 'info')
         return render_template('products/contact.html')
