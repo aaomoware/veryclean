@@ -1,6 +1,7 @@
 from flask import redirect, render_template, flash, request, url_for, session, current_app, make_response
 from flask_login import login_required, current_user, logout_user, login_user
-from shop import db, app, photos, bcrypt, login_manager, cal_cart_total
+from shop import db, app, photos, bcrypt, login_manager, cal_cart_total, mail
+from flask_mail import Message
 from .models import Register, CustomerOrder, Payments
 import secrets, os, json, pdfkit
 from mollie.api.client import Client
@@ -67,8 +68,7 @@ def get_order():
         invoice = secrets.token_hex(5)
         try:
             mollie_client = Client()
-            mollie_client.set_api_key('test_DH6rG3RrUAQrJGngCPgdzqD8GCE3Kd')
-            
+            mollie_client.set_api_key(os.environ.get('API_KEY'))
             amount = cal_cart_total(session['Shoppingcart'])
             
             payment = mollie_client.payments.create({
@@ -182,4 +182,20 @@ def ordercomplete(invoice):
 
     except Exception as e:
         print(e)
-    
+
+
+@app.route('/contact')
+def contact(): 
+    if request.method == 'GET':
+        return redirect(url_for('contactus'))
+    if request.method == 'POST': 
+           
+        firstname = request.form['firstname']
+        body = "Mr/Mr " + request.form['firstname'] + firstname + "," + "<br/>" + request.form['message'] + request.form['email']  
+        msg = Message(subject=request.form['subject'],
+                      sender=app.config.get("MAIL_USERNAME"),
+                      recipients=[app.config.get("RECIPIENT")],
+                      body=body
+        mail.send(msg)
+        flash(f'Hi {firstname},  thank you for getting in touch with us.')
+        return render_template('products/contact.html')
