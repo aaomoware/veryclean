@@ -197,9 +197,9 @@ def contact():
         #              reply_to=str(request.form['email']),
         #              recipients=[app.config.get("RECIPIENT")],
         #              body=str(body))
-        msg = Message("Hello",
+        msg = Message(str(request.form['subject']),
                       sender=str(app.config.get("MAIL_USERNAME")),
-                      reply_to=str(request.form['email']),
+                      reply_to=str([app.config.get("RECIPIENT")]),
                       recipients=[str(request.form['email'])])
         mail.send(msg)
         flash(f'Hi {firstname},  thank you for getting in touch with us.', 'info')
