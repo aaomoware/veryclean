@@ -194,7 +194,7 @@ def ordercomplete(invoice):
         if req.status_code in [200]:
             msg.html = req.text
         else:
-            msg.html = None
+            msg.html = "<p>None</p>"
         
         mail.send(msg)
         return render_template('customer/order_complete.html')
