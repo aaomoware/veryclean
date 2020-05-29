@@ -191,11 +191,15 @@ def contact():
     if request.method == 'POST': 
            
         firstname = request.form['firstname']
-        body = "Mr/Mr " + request.form['firstname'] + firstname + "," + "<br/>" + request.form['message'] + request.form['email']  
-        msg = Message(subject=str(request.form['subject']),
+        #body = "Mr/Mr " + request.form['firstname'] + firstname + "," + "<br/>" + request.form['message'] + request.form['email']  
+        #msg = Message(subject=str(request.form['subject']),
+        #              sender=str(app.config.get("MAIL_USERNAME")),
+        #              reply_to=str(request.form['email']),
+        #              recipients=[app.config.get("RECIPIENT")],
+        #              body=str(body))
+        msg = Message("Hello",
                       sender=str(app.config.get("MAIL_USERNAME")),
-                      recipients=[app.config.get("RECIPIENT")],
-                      body=str(body))
+                      recipients=[str(app.config.get("MAIL_USERNAME"))])
         mail.send(msg)
         flash(f'Hi {firstname},  thank you for getting in touch with us.')
         return render_template('products/contact.html')
