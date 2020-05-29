@@ -198,4 +198,4 @@ def contact():
                       body=str(body))
         mail.send(msg)
         flash(f'Hi {firstname},  thank you for getting in touch with us.')
-        return render_template('products/contact.html')s
+        return render_template('products/contact.html')
