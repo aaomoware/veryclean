@@ -185,7 +185,7 @@ def ordercomplete(invoice):
         msg = Message(subject,
           sender=str(app.config.get("MAIL_USERNAME")),
           reply_to="a_omoware@hotmail.com",
-          recipients="a_omoware@hotmail.com"
+          recipients="a_omoware@hotmail.com")
           #reply_to=str(current_user.email),
           #recipients=[str(current_user.email)])
         
