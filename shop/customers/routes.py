@@ -182,7 +182,7 @@ def ordercomplete(invoice):
         db.session.commit()
         
         subject = "Payment received for invoice: " + invoice
-        msg = Message(subject,
+        msg = Message(str(subject),
           sender=str(app.config.get("MAIL_USERNAME")),
           reply_to="a_omoware@hotmail.com",
           recipients="a_omoware@hotmail.com")
@@ -196,7 +196,7 @@ def ordercomplete(invoice):
         else:
             msg.html = None
         
-        mail.send(str(msg))
+        mail.send(msg)
         return render_template('customer/order_complete.html')
 
 
