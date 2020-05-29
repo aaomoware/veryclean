@@ -174,7 +174,7 @@ def ordercomplete(invoice):
         
     invoice_payment = Payments.query.filter_by(invoice=invoice).first()
     payment = mollie_client.payments.get(invoice_payment.payment_id)
-    customer_order = CustomerOrder.query.filter_by(customer_id=invoice_payment.customer_id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
+    customer_order = CustomerOrder.query.filter_by(customer_id=current_user.id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
         
     if payment.is_paid():
         invoice_payment.status = payment.status
