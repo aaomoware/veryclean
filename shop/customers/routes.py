@@ -191,12 +191,6 @@ def contact():
     if request.method == 'POST': 
            
         firstname = request.form['firstname']
-        #body = "Mr/Mr " + request.form['firstname'] + firstname + "," + "<br/>" + request.form['message'] + request.form['email']  
-        #msg = Message(subject=str(request.form['subject']),
-        #              sender=str(app.config.get("MAIL_USERNAME")),
-        #              reply_to=str(request.form['email']),
-        #              recipients=[app.config.get("RECIPIENT")],
-        #              body=str(body))
         msg = Message(str(request.form['subject']),
                       sender=str(app.config.get("MAIL_USERNAME")),
                       reply_to=str([app.config.get("RECIPIENT")]),
