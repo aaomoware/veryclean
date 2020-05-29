@@ -3,7 +3,7 @@ from flask_login import login_required, current_user, logout_user, login_user
 from shop import db, app, photos, bcrypt, login_manager, cal_cart_total, mail
 from flask_mail import Message
 from .models import Register, CustomerOrder, Payments
-import secrets, os, json, pdfkit
+import secrets, os, json, pdfkit, requests
 from mollie.api.client import Client
 
 
@@ -168,20 +168,34 @@ def get_pdf(invoice):
 
 @app.route('/ordercomplete/<invoice>')
 def ordercomplete(invoice):
-    try:
-        mollie_client = Client()
-        mollie_client.set_api_key('test_DH6rG3RrUAQrJGngCPgdzqD8GCE3Kd')
-        
-        invoice_payment = Payments.query.filter_by(invoice=invoice).first()
-        payment = mollie_client.payments.get(invoice_payment.payment_id)
-        
-        if payment.is_paid():
-            invoice_payment.status = payment.status
-            db.session.commit()
-            return render_template('customer/order_complete.html')
 
-    except Exception as e:
-        print(e)
+    mollie_client = Client()
+    mollie_client.set_api_key(os.environ['API_KEY'])
+        
+    invoice_payment = Payments.query.filter_by(invoice=invoice).first()
+    payment = mollie_client.payments.get(invoice_payment.payment_id)
+    customer_order = CustomerOrder.query.filter_by(customer_id=invoice_payment.customer_id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
+        
+    if payment.is_paid():
+        invoice_payment.status = payment.status
+        customer_order.status = payment.status
+        db.session.commit()
+        
+        subject = "Payment received for invoice: " + invoice
+        msg = Message(subject,
+          sender=str(app.config.get("MAIL_USERNAME")),
+          reply_to=str(request.form['email']),
+          recipients=[str(request.form['email'])])
+        
+        url = 'http://localhost:5000/orders/' + invoice
+        req = requests.get(url)
+        if req.status_code in [200]:
+            msg.html = req.text
+        else:
+            msg.html = None
+        
+        mail.send(msg)
+        return render_template('customer/order_complete.html')
 
 
 @app.route('/contact', methods=['GET', 'POST'])
