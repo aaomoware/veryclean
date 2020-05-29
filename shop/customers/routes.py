@@ -184,8 +184,10 @@ def ordercomplete(invoice):
         subject = "Payment received for invoice: " + invoice
         msg = Message(subject,
           sender=str(app.config.get("MAIL_USERNAME")),
-          reply_to=str(current_user.email),
-          recipients=[str(current_user.email)])
+          reply_to="a_omoware@hotmail.com",
+          recipients="a_omoware@hotmail.com"
+          #reply_to=str(current_user.email),
+          #recipients=[str(current_user.email)])
         
         url = 'http://localhost:5000/orders/' + invoice
         req = requests.get(url)
