@@ -192,13 +192,9 @@ def contact():
            
         firstname = request.form['firstname']
         body = "Mr/Mr " + request.form['firstname'] + firstname + "," + "<br/>" + request.form['message'] + request.form['email']  
-        msg = Message(subject="testing",
-                      sender=app.config.get("MAIL_USERNAME"),
+        msg = Message(subject=str(request.form['subject']),
                       recipients=[app.config.get("RECIPIENT")],
-                      body="hello")
+                      body=str(body))
         mail.send(msg)
         flash(f'Hi {firstname},  thank you for getting in touch with us.')
         return render_template('products/contact.html')
-    
-    
-    
