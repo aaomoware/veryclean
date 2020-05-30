@@ -69,45 +69,53 @@ def get_order():
         customer_id = current_user.id
         invoice = secrets.token_hex(5)
         
-        mollie_client = Client()
-        mollie_client.set_api_key(os.environ.get('API_KEY'))
         amount = cal_cart_total(session['Shoppingcart'])
-            
-        payment = mollie_client.payments.create({
-            'amount': {
-                'currency': 'EUR',
-                'value': '100.00'
-            },
-            'description': 'Payment for invoice: ' + invoice,
-            'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/ordercomplete/' + invoice,
-            'webhookUrl': 'https://verclean-531794983.eu-west-1.elb.amazonaws.com/mollie-webhook/',
-            'metadata': {
-                'invoice': str(invoice)
-            }
-        })
+        return render_template('customer/order_complete.html', amount=amount)
         
-        if payment.status == 'open':
-            payments = Payments(
-                status = payment.status,
-                amount = amount,
-                invoice = invoice,
-                payment_id = payment.id
-            )
-        
-            order = CustomerOrder(
-                invoice = invoice,
-                customer_id = customer_id,
-                orders = session['Shoppingcart']
-            )
-            
-            db.session.add(payments)
-            db.session.add(order)
-            db.session.commit()
-            
-            session.pop('Shoppingcart')
-            return redirect(payment.checkout_url)
-    return redirect(url_for('carts'))
-
+        #try:
+        #    mollie_client = Client()
+        #    mollie_client.set_api_key(os.environ.get('API_KEY'))
+        #    amount = cal_cart_total(session['Shoppingcart'])
+        #    
+        #    payment = mollie_client.payments.create({
+        #        'amount': {
+        #            'currency': 'EUR',
+        #            'value': str(amount)
+        #        },
+        #        'description': 'Payment for invoice: ' + invoice,
+        #        'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/ordercomplete/' + invoice,
+        #        'webhookUrl': 'https://verclean-531794983.eu-west-1.elb.amazonaws.com/mollie-webhook/',
+        #        'metadata': {
+        #            'invoice': str(invoice)
+        #        }
+        #    })
+        #
+        #    if payment.status == 'open':
+        #        payments = Payments(
+        #            status = payment.status,
+        #            amount = amount,
+        #            invoice = invoice,
+        #            payment_id = payment.id
+        #        )
+        #    
+        #        order = CustomerOrder(
+        #            invoice = invoice,
+        #            customer_id = customer_id,
+        #            orders = session['Shoppingcart']
+        #        )
+        #        
+        #        db.session.add(payments)
+        #        db.session.add(order)
+        #        db.session.commit()
+        #        
+        #        session.pop('Shoppingcart')
+        #        return redirect(payment.checkout_url)
+        #    return redirect(url_for('carts'))
+        #            
+        #except Exception as e:
+        #    print(e)
+        #    flash('Something went wrong while getting orders', 'danger')
+        #    return redirect(url_for('get_carts'))
 
 @app.route('/orders/<invoice>')
 @login_required
