@@ -112,7 +112,6 @@ def get_order():
             return redirect(url_for('get_carts'))
 
 @app.route('/orders/<invoice>')
-@login_required
 def orders(invoice):
     if current_user.is_authenticated:
         totaldiscount = 0
