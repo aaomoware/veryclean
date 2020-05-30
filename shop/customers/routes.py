@@ -111,12 +111,11 @@ def get_order():
             flash('Something went wrong while getting orders', 'danger')
             return redirect(url_for('get_carts'))
 
-@app.route('/orders/<invoice>')
+@app.route('/orders/<invoice>/<customer_id>')
 def orders(invoice):
     totaldiscount = 0
     grandtotal = 0
     subtotal = 0
-    customer_id = current_user.id
     customer = Register.query.filter_by(id=customer_id).first()
     orders = CustomerOrder.query.filter_by(customer_id=customer_id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
     tax = 0
@@ -163,6 +162,7 @@ def get_pdf(invoice):
 
 
 @app.route('/ordercomplete/<invoice>')
+@login_required
 def ordercomplete(invoice):
 
     mollie_client = Client()
@@ -185,7 +185,7 @@ def ordercomplete(invoice):
           #reply_to=str(current_user.email),
           #recipients=[str(current_user.email)])
         
-        url = 'http://localhost:5000/orders/' + invoice
+        url = 'http://localhost:5000/orders/' + invoice + '/' + current_user.id
         req = requests.get(url)
         if req.status_code in [200]:
             msg.html = req.text
