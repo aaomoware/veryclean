@@ -105,7 +105,7 @@ def get_order():
             db.session.commit()
             
             session.pop('Shoppingcart')
-        return redirect(payment.checkout_url)
+            return redirect(payment.checkout_url)
     return redirect(url_for('carts'))
 
 
