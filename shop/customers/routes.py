@@ -5,6 +5,7 @@ from flask_mail import Message
 from .models import Register, CustomerOrder, Payments
 import secrets, os, json, pdfkit, requests
 from mollie.api.client import Client
+from weasyprint import HTML, render_pdf
 
 
 @app.route('/customer/register',  methods=['GET', 'POST'])
@@ -154,12 +155,8 @@ def get_pdf(invoice):
                 grandtotal = float("%.2f" % (1.06 * subtotal))
                 totaldiscount += discount
   
-            rendered = render_template('customer/pdf.html', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=orders)
-            pdf = pdfkit.from_string(rendered, False)
-            response = make_response(pdf)
-            response.headers['Content-Type']='application/pdf'
-            response.headers['Content-Disposition']='inline: filename='+ invoice +'.pdf'
-            return response
+                html = render_template('customer/pdf.html', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=orders)
+            return render_pdf(HTML(string=html))
         return request(url_for('orders'))
 
 
