@@ -113,25 +113,22 @@ def get_order():
 
 @app.route('/orders/<invoice>')
 def orders(invoice):
-    if current_user.is_authenticated:
-        totaldiscount = 0
-        grandtotal = 0
-        subtotal = 0
-        customer_id = current_user.id
-        customer = Register.query.filter_by(id=customer_id).first()
-        orders = CustomerOrder.query.filter_by(customer_id=customer_id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
-        tax = 0
+    totaldiscount = 0
+    grandtotal = 0
+    subtotal = 0
+    customer_id = current_user.id
+    customer = Register.query.filter_by(id=customer_id).first()
+    orders = CustomerOrder.query.filter_by(customer_id=customer_id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
+    tax = 0
         
-        for _key, product in orders.orders.items():
-            discount = (product['discount']/100) * float(product['price'])
-            subtotal += float(product['price']) * int(product['quantity'])
-            subtotal -= discount
-            tax = ("%.2f" % (.06 * float(subtotal)))
-            grandtotal = float("%.2f" % (1.06 * subtotal))
-            totaldiscount += discount
+    for _key, product in orders.orders.items():
+        discount = (product['discount']/100) * float(product['price'])
+        subtotal += float(product['price']) * int(product['quantity'])
+        subtotal -= discount
+        tax = ("%.2f" % (.06 * float(subtotal)))
+        grandtotal = float("%.2f" % (1.06 * subtotal))
+        totaldiscount += discount
     
-    else:
-        return redirect(url_for('CustomerLogin'))
     return render_template('customer/orders.html', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=orders)
 
 
