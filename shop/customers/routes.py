@@ -111,7 +111,7 @@ def get_order():
             flash('Something went wrong while getting orders', 'danger')
             return redirect(url_for('get_carts'))
 
-@app.route('/orders/<invoice>')
+@app.route('/orders/<invoice>/<customer_id>')
 def orders(invoice):
     totaldiscount = 0
     grandtotal = 0
@@ -127,8 +127,8 @@ def orders(invoice):
         tax = ("%.2f" % (.06 * float(subtotal)))
         grandtotal = float("%.2f" % (1.06 * subtotal))
         totaldiscount += discount
-    rendered = render_template('customer/orders.html', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=orders)
-    return rendered
+    
+    return render_template('customer/orders.html', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=orders)
 
 
 @app.route('/get_pdf/<invoice>', methods=['POST'])
@@ -171,21 +171,27 @@ def ordercomplete(invoice):
     invoice_payment = Payments.query.filter_by(invoice=invoice).first()
     payment = mollie_client.payments.get(invoice_payment.payment_id)
     customer_order = CustomerOrder.query.filter_by(customer_id=current_user.id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
-
+        
     if payment.is_paid():
         invoice_payment.status = payment.status
         customer_order.status = payment.status
         db.session.commit()
         
-        subject = "Payment received for invoice: " + str(invoice)
-        msg = Message(subject,
+        subject = "Payment received for invoice: " + invoice
+        msg = Message(str(subject),
           sender=str(app.config.get("MAIL_USERNAME")),
-          reply_to=str("a_omoware@hotmail.com"),
-          recipients=str("a_omoware@hotmail.com"))
+          reply_to="a_omoware@hotmail.com",
+          recipients=["a_omoware@hotmail.com"])
           #reply_to=str(current_user.email),
           #recipients=[str(current_user.email)])
-          
-        msg.html = "<p>Please see your invoice attached. Thanks for your order.</p>"        
+        
+        url = 'http://localhost:5000/orders/' + str(invoice) + '/' + current_user.id
+        req = requests.get(url)
+        if req.status_code in [200]:
+            msg.html = req.text
+        else:
+            msg.html = "<p>None</p>"
+        
         mail.send(msg)
         return render_template('customer/order_complete.html')
 
