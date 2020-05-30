@@ -5,7 +5,8 @@ from flask_mail import Message
 from .models import Register, CustomerOrder, Payments
 import secrets, os, json, pdfkit, requests
 from mollie.api.client import Client
-from weasyprint import HTML, render_pdf
+from flask_weasyprint import HTML, render_pdf
+
 
 
 @app.route('/customer/register',  methods=['GET', 'POST'])
