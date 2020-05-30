@@ -178,7 +178,7 @@ def ordercomplete(invoice):
         db.session.commit()
         
         subject = "Payment received for invoice: " + invoice
-        msg = Message(str(subject),
+        msg = Message(subject,
           sender=str(app.config.get("MAIL_USERNAME")),
           reply_to="a_omoware@hotmail.com",
           recipients="a_omoware@hotmail.com")
