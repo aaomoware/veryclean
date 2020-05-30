@@ -185,7 +185,7 @@ def ordercomplete(invoice):
           #reply_to=str(current_user.email),
           #recipients=[str(current_user.email)])
         
-        url = 'http://localhost:5000/orders/' + invoice + '/' + current_user.id
+        url = 'http://localhost:5000/orders/' + str(invoice) + '/' + str(current_user.id)
         req = requests.get(url)
         if req.status_code in [200]:
             msg.html = req.text
