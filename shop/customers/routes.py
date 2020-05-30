@@ -1,9 +1,9 @@
 from flask import redirect, render_template, flash, request, url_for, session, current_app, make_response
 from flask_login import login_required, current_user, logout_user, login_user
-from shop import db, app, photos, bcrypt, login_manager, cal_cart_total, mail
+from shop import db, app, photos, bcrypt, login_manager, cal_cart_total, cal_cart, mail
 from flask_mail import Message
 from .models import Register, CustomerOrder, Payments
-import secrets, os, json, pdfkit, requests
+import secrets, os, json, pdfkit
 from mollie.api.client import Client
 from flask_weasyprint import HTML, render_pdf
 
@@ -167,7 +167,8 @@ def ordercomplete(invoice):
 
     mollie_client = Client()
     mollie_client.set_api_key(os.environ['API_KEY'])
-        
+    
+    customer = Register.query.filter_by(id=current_user.id).first()
     invoice_payment = Payments.query.filter_by(invoice=invoice).first()
     payment = mollie_client.payments.get(invoice_payment.payment_id)
     customer_order = CustomerOrder.query.filter_by(customer_id=current_user.id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
@@ -184,14 +185,11 @@ def ordercomplete(invoice):
           recipients=["a_omoware@hotmail.com"])
           #reply_to=str(current_user.email),
           #recipients=[str(current_user.email)])
+          
+        tax, subtotal, grandtotal, totaldiscount = cal_cart(customer_order.orders)
+        html = render_template('customer/pdf.html', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=customer_order.orders)
         
-        url = 'http://localhost:5000/orders/' + str(invoice) + '/' + str(current_user.id)
-        req = requests.get(url)
-        if req.status_code in [200]:
-            msg.html = req.text
-        else:
-            msg.html = "<p>None</p>"
-        
+        msg.html = str(html)
         mail.send(msg)
         return render_template('customer/order_complete.html')
 
