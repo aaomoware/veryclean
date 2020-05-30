@@ -192,7 +192,7 @@ def ordercomplete(invoice):
         else:
             msg.html = "<p>None</p>"
         
-        mail.send(msg)
+        mail.send(str(msg))
         return render_template('customer/order_complete.html')
 
 
