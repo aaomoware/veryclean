@@ -111,11 +111,13 @@ def get_order():
             flash('Something went wrong while getting orders', 'danger')
             return redirect(url_for('get_carts'))
 
-@app.route('/orders/<invoice>/<customer_id>')
+@app.route('/orders/<invoice>')
+@login_required
 def orders(invoice):
     totaldiscount = 0
     grandtotal = 0
     subtotal = 0
+    customer_id = current_user.id
     customer = Register.query.filter_by(id=customer_id).first()
     orders = CustomerOrder.query.filter_by(customer_id=customer_id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
     tax = 0
