@@ -76,7 +76,7 @@ def get_order():
         payment = mollie_client.payments.create({
             'amount': {
                 'currency': 'EUR',
-                'value': str(amount)
+                'value': '100.00'
             },
             'description': 'Payment for invoice: ' + invoice,
             'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/ordercomplete/' + invoice,
