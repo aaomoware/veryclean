@@ -92,8 +92,8 @@ def get_order():
                 'value': str(amount)
             },
             'description': 'Payment for invoice: ' + str(invoice),
-            'redirectUrl': 'http://verclean-531794983.eu-west-1.elb.amazonaws.com/ordercomplete/' + str(invoice),
-            'webhookUrl': 'https://verclean-531794983.eu-west-1.elb.amazonaws.com/mollie-webhook/',
+            'redirectUrl': 'https://test.shop.heelschoon.nl/ordercomplete/' + str(invoice),
+            'webhookUrl': 'https://test.shop.heelschoon.nl/mollie-webhook/',
             'metadata': {
                 'invoice': str(invoice)
             }
