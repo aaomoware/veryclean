@@ -5,7 +5,6 @@ from flask_uploads import IMAGES, UploadSet, configure_uploads, patch_request_cl
 from flask_mail import Mail
 import os
 from flask_login import LoginManager
-from flask_msearch import Search
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
