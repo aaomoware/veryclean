@@ -12,7 +12,7 @@ from flask_weasyprint import HTML, render_pdf
 
 def product_quantity(orders, paid):
     for key, p in orders.items():
-        product = Addproduct.query.get_or_404(p['id'])
+        product = Addproduct.query.get_or_404(key)
         if paid:
             product.quantity -= p['quantity']
             db.session.commit()
