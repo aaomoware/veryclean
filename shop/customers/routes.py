@@ -3,11 +3,23 @@ from flask_login import login_required, current_user, logout_user, login_user
 from shop import db, app, photos, bcrypt, login_manager, cal_cart_total, cal_cart, mail
 from flask_mail import Message
 from .models import Register, CustomerOrder, Payments
+from shop.products.models import Addproduct
 import secrets, os, json, pdfkit
 from mollie.api.client import Client
 from flask_weasyprint import HTML, render_pdf
 
 
+
+def product_quantity(orders, paid):
+    for key, p in orders.items():
+        product = Addproduct.query.get_or_404(p['id'])
+        if paid:
+            product.quantity -= p['quantity']
+            db.session.commit()
+        else:
+            product.quantity += p['quantity']
+            db.session.commit()
+        
 
 @app.route('/customer/register',  methods=['GET', 'POST'])
 def customer_register():
@@ -105,6 +117,7 @@ def get_order():
                 db.session.add(order)
                 db.session.commit()
                 
+                product_quantity(session['Shoppingcart'], True)
                 session.pop('Shoppingcart')
                 return redirect(payment.checkout_url)
             return redirect(url_for('carts'))
@@ -193,6 +206,9 @@ def ordercomplete(invoice):
         msg.html = str(html)
         mail.send(msg)
         return render_template('customer/order_complete.html')
+    else:
+        product_quantity(customer_order.orders, False)
+        return render_template('customer/order_failed.html')
 
 
 @app.route('/contact', methods=['GET', 'POST'])
