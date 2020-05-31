@@ -38,15 +38,15 @@
             </thead>
             <tbody>
                 {% for key, product in orders.items() %}
-                {% set discount =(product.discount/100) * product.price|float %}
+                {% set discount = "%0.2f" |format((product.discount/100) * product.price|float) %}
                 <tr>
                     <td>{{loop.index}}</td>
                     <td>{{product.name}}</td>
                     <form action="" method="post">
                     <td>${{"%.2f"|format(product.price)}}</td>
                     <td> {{product.quantity}} </td>
-                    {% if product.discount  %}
-                    <td>{{product.discount}} % &nbsp; &nbsp; is {{"%.2f"|format(discount)}}</td>
+                    {% if product.discount > 0 %}
+                    <td>{{product.discount}} % &nbsp; &nbsp; is {{discount)}}</td>
                     {% else %}
                     <td></td>
                     {% endif %}
