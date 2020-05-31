@@ -205,7 +205,7 @@ def ordercomplete(invoice):
         
         msg.html = str(html)
         mail.send(msg)
-        return render_template('customer/order_complete.html')
+        return render_template('customer/order_failed.html')
     else:
         product_quantity(customer_order.orders, False)
         return render_template('customer/order_failed.html')
