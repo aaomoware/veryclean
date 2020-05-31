@@ -43,7 +43,7 @@
                     <td>{{loop.index}}</td>
                     <td>{{product.name}}</td>
                     <form action="" method="post">
-                    <td>${{"%.2f"|format(product.price)}}</td>
+                    <td>€{{product.price}}</td>
                     <td> {{product.quantity}} </td>
                     {% if product.discount > 0 %}
                     <td>{{product.discount}} % &nbsp; &nbsp; is {{discount}}</td>
