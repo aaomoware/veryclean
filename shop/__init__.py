@@ -32,8 +32,6 @@ patch_request_class(app)
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
-search = Search()
-search.init_app(app)
 
 def cal_cart(orders):
     tax = 0
