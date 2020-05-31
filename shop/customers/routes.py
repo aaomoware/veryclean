@@ -153,24 +153,11 @@ def orders(invoice):
 @login_required
 def get_pdf(invoice):
     if current_user.is_authenticated:
-        totaldiscount = 0
-        grandtotal = 0
-        subtotal = 0
-        customer_id = current_user.id
         if request.method == 'POST':
-            customer = Register.query.filter_by(id=customer_id).first()
-            orders = CustomerOrder.query.filter_by(customer_id=customer_id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
-            tax = 0
-        
-            for _key, product in orders.orders.items():
-                discount = (product['discount']/100) * float(product['price'])
-                subtotal += float(product['price']) * int(product['quantity'])
-                subtotal -= discount
-                tax = ("%.2f" % (.06 * float(subtotal)))
-                grandtotal = float("%.2f" % (1.06 * subtotal))
-                totaldiscount += discount
-  
-                html = render_template('customer/pdf.html', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=orders)
+            customer_order = CustomerOrder.query.filter_by(customer_id=current_user.id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
+            
+            tax, subtotal, grandtotal, totaldiscount = cal_cart(customer_order.orders)
+            html = render_template('customer/invoice.html',status='Paid', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=customer_order.orders)
             return render_pdf(HTML(string=html))
         return request(url_for('orders'))
 
