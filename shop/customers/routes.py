@@ -114,7 +114,7 @@ def get_order():
             flash('Something went wrong while getting orders', 'danger')
             return redirect(url_for('get_carts'))
 
-@app.route('/orders/<invoice>')
+@app.route('/orders/<invoice>', methods=['GET'])
 @login_required
 def orders(invoice):
     totaldiscount = 0
