@@ -1,6 +1,6 @@
 from flask import redirect, render_template, flash, request, url_for, session, current_app
 from flask_login import login_required, current_user, logout_user, login_user
-from shop import db, app, photos, search
+from shop import db, app, photos
 from .models import Brand, Category, Addproduct
 from .forms import Addproducts
 import secrets, os
