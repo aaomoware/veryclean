@@ -13,14 +13,13 @@
   <body>
   
 <div class="container mt-4">
-    {% include '_messages.html' %}
     <div class="row">
         <div class="col-md-12">
             <b style="float: right;">Inoice: {{invoice}} </b> 
             <br>
             Status: {{status}}
             <br>
-            Customer name: {{customer.firstname}}
+            Customer name: {{customer.firstname}} {{customer.lastname}} 
             <br>
             Customer email: {{customer.email}}
             <br>
@@ -59,7 +58,7 @@
         <table class="table table-sm">
            <tr>
                <td width="35%"></td>
-               <td> <h5>Tax: ${{tax}}</h5></td>
+               <td> <h5>Tax: ${{tax}}</h5></td><br />
                <td> <h5>Grand total: ${{grandtotal}}</h3> </td>
         
            </tr>
