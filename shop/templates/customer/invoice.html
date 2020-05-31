@@ -49,6 +49,7 @@
                     {% else %}
                     <td></td>
                     {% endif %}
+                     {% set subtotal = product.quantity|int * product.price|float  %}
                     <td>${{subtotal}}</td>
                 </form>        
                 </tr>
