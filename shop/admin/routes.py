@@ -10,7 +10,7 @@ import os
 @login_required
 def admin():
     if current_user.is_authenticated:
-        if os.environ['ADMIN'] not in session:
+        if os.environ['ADMIN'] != current_user.email:
             return redirect(url_for('shop'))
         else:
             products = Addproduct.query.all()
@@ -22,7 +22,7 @@ def admin():
 @login_required
 def brands():
     if current_user.is_authenticated:
-        if os.environ['ADMIN'] not in session:
+        if os.environ['ADMIN'] != current_user.email:
             return redirect(url_for('shop'))
         else: 
             brands = Brand.query.order_by(Brand.id.desc()).all()
@@ -34,7 +34,7 @@ def brands():
 @login_required
 def categories():
     if current_user.is_authenticated:
-        if os.environ['ADMIN'] not in session:
+        if os.environ['ADMIN'] != current_user.email:
             return redirect(url_for('shop'))
         else:
             categories = Category.query.order_by(Category.id.desc()).all()

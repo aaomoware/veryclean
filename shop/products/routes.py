@@ -80,7 +80,7 @@ def get_category(id):
 @app.route('/addbrand', methods=['GET', 'POST'])
 @login_required
 def addbrand():
-    if os.environ['ADMIN'] not in session:
+    if os.environ['ADMIN'] != current_user.email:
         return redirect(url_for('shop'))
     else:
         if request.method == 'POST':
@@ -97,7 +97,7 @@ def addbrand():
 @app.route('/updatebrand/<int:id>', methods=['GET', 'POST'])
 @login_required
 def updatebrand(id):
-    if os.environ['ADMIN'] not in session:
+    if os.environ['ADMIN'] != current_user.email:
         return redirect(url_for('shop'))
     else:
         updatebrand = Brand.query.get_or_404(id)
@@ -114,7 +114,7 @@ def updatebrand(id):
 @app.route('/deletebrand/<int:id>', methods=['POST'])
 @login_required
 def deletebrand(id):
-    if os.environ['ADMIN'] not in session:
+    if os.environ['ADMIN'] != current_user.email:
         return redirect(url_for('shop'))
     else:
         brand = Brand.query.get_or_404(id)
@@ -130,7 +130,7 @@ def deletebrand(id):
 @app.route('/addcategory', methods=['GET', 'POST'])
 @login_required
 def addcategory():
-    if os.environ['ADMIN'] not in session:
+    if os.environ['ADMIN'] != current_user.email:
         return redirect(url_for('shop'))
     else:
         if request.method == 'POST':
@@ -147,7 +147,7 @@ def addcategory():
 @app.route('/updatecategory/<int:id>', methods=['GET', 'POST'])
 @login_required
 def updatecategory(id):
-    if os.environ['ADMIN'] not in session:
+    if os.environ['ADMIN'] != current_user.email:
         return redirect(url_for('shop'))
     else:
         updatecategory = Category.query.get_or_404(id)
@@ -165,7 +165,7 @@ def updatecategory(id):
 @app.route('/deletecategory/<int:id>', methods=['POST'])
 @login_required
 def deletecategory(id):
-    if os.environ['ADMIN'] not in session:
+    if os.environ['ADMIN'] != current_user.email:
         return redirect(url_for('shop'))
     else:
         category = Category.query.get_or_404(id)
@@ -182,7 +182,7 @@ def deletecategory(id):
 @app.route('/addproduct', methods=['GET', 'POST'])
 @login_required
 def addproduct():
-    if os.environ['ADMIN'] not in session:
+    if os.environ['ADMIN'] != current_user.email:
         return redirect(url_for('shop'))
     else:
         brands = Brand.query.all()
@@ -226,7 +226,7 @@ def addproduct():
 @app.route('/updateproduct/<int:id>', methods=["GET", 'POST'])
 @login_required
 def updateproduct(id):
-    if os.environ['ADMIN'] not in session:
+    if os.environ['ADMIN'] != current_user.email:
         return redirect(url_for('shop'))
     else:
         brands = Brand.query.all()
@@ -281,7 +281,7 @@ def updateproduct(id):
 @app.route('/deleteproduct/<int:id>', methods=['POST'])
 @login_required
 def deleteproduct(id):
-    if os.environ['ADMIN'] not in session:
+    if os.environ['ADMIN'] != current_user.email:
         return redirect(url_for('shop'))
     else:
         product = Addproduct.query.get_or_404(id)
