@@ -47,16 +47,16 @@ def cal_cart(orders):
         grandtotal = float("%.2f" % (1.06 * subtotal))
 
     amount = str(tax).split(".")
-    if int(amount[1]) < 10:
+    if len(amount[1]) < 1:
         tax = amount[0] + '.' + amount[1] + '0'  
     amount = str(subtotal).split(".")
-    if int(amount[1]) < 10:
+    if len(amount[1]) < 1:
         subtotal = amount[0] + '.' + amount[1] + '0'
     amount = str(grandtotal).split(".")
-    if int(amount[1]) < 10:
+    if len(amount[1]) < 1:
         grandtotal = amount[0] + '.' + amount[1] + '0'
     amount = str(totaldiscount).split(".")
-    if int(amount[1]) < 10:
+    if len(amount[1]) < 1:
         totaldiscount = amount[0] + '.' + amount[1] + '0' 
     
     return tax, subtotal, grandtotal, totaldiscount
@@ -74,7 +74,7 @@ def cal_cart_total(orders):
         grandtotal = float("%.2f" % (1.06 * subtotal))
     
     amount = str(grandtotal).split(".")
-    if int(amount[1]) < 10:
+    if len(amount[1]) < 1:
         grandtotal = amount[0] + '.' + amount[1] + '0'
         return grandtotal
     return grandtotal
