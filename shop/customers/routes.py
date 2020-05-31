@@ -14,10 +14,10 @@ def product_quantity(orders, paid):
     for key, p in orders.items():
         product = Addproduct.query.get_or_404(key)
         if paid:
-            product.stock -= p['quantity']
+            product.stock -= int(p['quantity'])
             db.session.commit()
         else:
-            product.stock += p['quantity']
+            product.stock += int(p['quantity'])
             db.session.commit()
         
 
