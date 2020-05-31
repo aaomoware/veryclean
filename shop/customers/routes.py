@@ -154,6 +154,7 @@ def orders(invoice):
 def get_pdf(invoice):
     if current_user.is_authenticated:
         if request.method == 'POST':
+            customer = Register.query.filter_by(id=current_user.id).first()
             customer_order = CustomerOrder.query.filter_by(customer_id=current_user.id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
             
             tax, subtotal, grandtotal, totaldiscount = cal_cart(customer_order.orders)
