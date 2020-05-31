@@ -243,6 +243,9 @@ def updateproduct(id):
             products.stock = form.stock.data
             products.colours = form.colours.data
             products.description = form.description.data
+            products.image_1 = form.image_1.data
+            products.image_2 = form.image_2.data
+            products.image_3 = form.image_3.data
 
             if request.files.get('image_1'):
                 try:
