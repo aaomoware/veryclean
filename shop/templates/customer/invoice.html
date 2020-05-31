@@ -45,12 +45,12 @@
                     <td>€{{product.price}}</td>
                     <td> {{product.quantity}} </td>
                     {% if product.discount > 0 %}
-                    <td>{{product.discount}} % &nbsp; &nbsp; is {{discount}}</td>
+                    <td>{{product.discount}} % is €{{discount}}</td>
                     {% else %}
                     <td></td>
                     {% endif %}
                      {% set subtotal = product.quantity|int * product.price|float  %}
-                    <td>${{subtotal|float - discount|float}}</td>
+                    <td>€{{subtotal|float - discount|float}}</td>
                 </form>        
                 </tr>
                 {% endfor %}
