@@ -275,6 +275,9 @@ def updateproduct(id):
     form.stock.data = products.stock
     form.colours.data = products.colours
     form.description.data = products.description
+    form.image_1.data = products.image_1
+    form.image_2.data = products.image_2
+    form.image_3.data = products.image_3
     return render_template('products/updateproduct.html', form=form, brands=brands, products=products, categories=categories)
 
 
