@@ -188,7 +188,7 @@ def ordercomplete(invoice):
           #recipients=[str(current_user.email)])
           
         tax, subtotal, grandtotal, totaldiscount = cal_cart(customer_order.orders)
-        html = render_template('customer/invoice.html', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=customer_order.orders)
+        html = render_template('customer/invoice.html',status=payment.status, invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=customer_order.orders)
         
         msg.html = str(html)
         mail.send(msg)

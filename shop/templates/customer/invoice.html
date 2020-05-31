@@ -16,20 +16,20 @@
     {% include '_messages.html' %}
     <div class="row">
         <div class="col-md-12">
-            <b style="float: right;">Inoice: {{orders.invoice}} </b> 
+            <b style="float: right;">Inoice: {{invoice}} </b> 
             <br>
-            Status: {{orders.status}}
+            Status: {{status}}
             <br>
-            Customer name: {{customer.name}}
+            Customer name: {{customer.firstname}}
             <br>
             Customer email: {{customer.email}}
             <br>
-            Customer contact: {{customer.contact}}
+            Customer contact: {{customer.phonenumber}}
             <br>
             <br>
         <table class="table table-sm">
             <thead>
-                <th>Sr</th>
+                <th>Item</th>
                 <th>Name</th>
                 <th>Price</th>
                 <th>Quantity</th>
