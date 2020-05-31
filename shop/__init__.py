@@ -49,7 +49,7 @@ def cal_cart(orders):
 
     grandtotal += float(os.environ['POST_COST'])
     amount = str(tax).split(".")
-    if len(amount[1]) -- 1:
+    if len(amount[1]) == 1:
         tax = amount[0] + '.' + amount[1] + '0'  
     amount = str(subtotal).split(".")
     if len(amount[1]) == 1:
