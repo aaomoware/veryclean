@@ -32,7 +32,7 @@ def contactus():
 def shop():
     if request.method == 'POST':
         page = request.args.get('page', 1, type=int)
-        searchword = request.args.get('search')
+        searchword = request.form.get('search')
         products = Addproduct.query.filter(Addproduct.description.like('%' + searchword + '%')).paginate(page=page, per_page=8)
         
         colours = []
