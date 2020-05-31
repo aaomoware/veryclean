@@ -48,8 +48,8 @@ def AddCart():
 def get_carts():
     if 'Shoppingcart' not in session:
         return redirect(url_for('shop'))
-    tax, subtotal, grandtotal, totaldiscount = cal_cart(session['Shoppingcart'])
-    return render_template('products/cart.html', tax=tax, grandtotal=grandtotal, totaldiscount=totaldiscount, subtotal=subtotal)
+    tax, subtotal, grandtotal, totaldiscount, post_cost = cal_cart(session['Shoppingcart'])
+    return render_template('products/cart.html', tax=tax, grandtotal=grandtotal, totaldiscount=totaldiscount, subtotal=subtotal, post_cost=post_cost)
 
 
 @app.route('/clearcart', methods=['POST'])
@@ -69,8 +69,8 @@ def checkout():
     if 'Shoppingcart' not in session:
         return redirect(request.referrer)
     if request.method == 'POST':
-        tax, subtotal, grandtotal, totaldiscount = cal_cart(session['Shoppingcart'])
-        return render_template('products/checkout.html', tax=tax, grandtotal=grandtotal, totaldiscount=totaldiscount, subtotal=subtotal)
+        tax, subtotal, grandtotal, totaldiscount, post_cost = cal_cart(session['Shoppingcart'])
+        return render_template('products/checkout.html', tax=tax, grandtotal=grandtotal, totaldiscount=totaldiscount, subtotal=subtotal, post_cost=post_cost)
     else:
         return redirect(url_for('shop'))
 

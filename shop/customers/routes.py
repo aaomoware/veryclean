@@ -157,8 +157,8 @@ def get_pdf(invoice):
             customer = Register.query.filter_by(id=current_user.id).first()
             customer_order = CustomerOrder.query.filter_by(customer_id=current_user.id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
             
-            tax, subtotal, grandtotal, totaldiscount = cal_cart(customer_order.orders)
-            html = render_template('customer/invoice.html',status='Paid', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=customer_order.orders)
+            tax, subtotal, grandtotal, totaldiscount, post_cost = cal_cart(customer_order.orders)
+            html = render_template('customer/invoice.html',status='Paid', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=customer_order.orders, post_cost=post_cost)
             return render_pdf(HTML(string=html))
         return request(url_for('orders'))
 
@@ -188,8 +188,8 @@ def ordercomplete(invoice):
           #reply_to=str(current_user.email),
           #recipients=[str(current_user.email)])
           
-        tax, subtotal, grandtotal, totaldiscount = cal_cart(customer_order.orders)
-        html = render_template('customer/invoice.html',status='Paid', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=customer_order.orders)
+        tax, subtotal, grandtotal, totaldiscount, post_cost = cal_cart(customer_order.orders)
+        html = render_template('customer/invoice.html',status='Paid', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=customer_order.orders, post_cost=post_cost)
         
         msg.html = str(html)
         mail.send(msg)

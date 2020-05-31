@@ -47,6 +47,7 @@ def cal_cart(orders):
         tax = ("%.2f" % (.21 * float(subtotal)))
         grandtotal = float("%.2f" % (1.06 * subtotal))
 
+    grandtotal += float(os.environ['POST_COST'])
     amount = str(tax).split(".")
     if len(amount[1]) -- 1:
         tax = amount[0] + '.' + amount[1] + '0'  
@@ -60,7 +61,7 @@ def cal_cart(orders):
     if len(amount[1]) == 1:
         totaldiscount = amount[0] + '.' + amount[1] + '0' 
     
-    return tax, subtotal, grandtotal, totaldiscount
+    return tax, subtotal, grandtotal, totaldiscount, str(os.environ['POST_COST'])
 
 
 def cal_cart_total(orders):
@@ -74,6 +75,7 @@ def cal_cart_total(orders):
         subtotal -= discount
         grandtotal = float("%.2f" % (1.06 * subtotal))
     
+    grandtotal += float(os.environ['POST_COST'])
     amount = str(grandtotal).split(".")
     if len(amount[1]) == 1:
         grandtotal = amount[0] + '.' + amount[1] + '0'
