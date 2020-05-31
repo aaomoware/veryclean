@@ -210,3 +210,8 @@ def contact():
         mail.send(msg)
         flash(f'Hi {firstname},  thank you for getting in touch with us.', 'info')
         return render_template('products/contact.html')
+
+
+@app.route('/customer/privacy', methods=['GET', 'POST'])
+def privacy():
+    return render_template('customer/privacy.html')
