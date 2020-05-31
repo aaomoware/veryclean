@@ -2,6 +2,7 @@ from wtforms import Form, SubmitField,IntegerField,FloatField,StringField,TextAr
 from flask_wtf.file import FileField,FileRequired,FileAllowed
 
 class Addproducts(Form):
+     __seachbale__ = ['name','desc']
     name = StringField('Name', [validators.DataRequired()])
     price = DecimalField('Price', [validators.DataRequired()])
     stock = IntegerField('Stock', [validators.DataRequired()])

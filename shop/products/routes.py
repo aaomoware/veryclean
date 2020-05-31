@@ -1,6 +1,6 @@
 from flask import redirect, render_template, flash, request, url_for, session, current_app
 from flask_login import login_required, current_user, logout_user, login_user
-from shop import db, app, photos
+from shop import db, app, photos, search
 from .models import Brand, Category, Addproduct
 from .forms import Addproducts
 import secrets, os
@@ -28,17 +28,25 @@ def about():
 def contactus():
     return render_template('products/contact.html', contact=1)
 
-@app.route('/shop')
+@app.route('/shop', methods=['GET', 'POST'])
 def shop():
-    page = request.args.get('page', 1, type=int)
-    products = Addproduct.query.filter(Addproduct.stock > 0).paginate(page=page, per_page=8)
-    brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
-    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
+    if request.method == 'POST':
+        page = request.args.get('page', 1, type=int)
+        searchword = request.args.get('search')
+        products = Addproduct.query.msearch(searchword, fields=['name','desc'] , limit=6).paginate(page=page, per_page=8)
+        
+        colours = []
+        for product in products.items:
+            colours.append(product.colours)
+        return render_template('products/shop.html', products=products, shop=1)
+    else:
+        page = request.args.get('page', 1, type=int)
+        products = Addproduct.query.filter(Addproduct.stock > 0).paginate(page=page, per_page=8)
 
-    colours = []
-    for product in products.items:
-        colours.append(product.colours)
-    return render_template('products/shop.html', products=products, shop=1)
+        colours = []
+        for product in products.items:
+            colours.append(product.colours)
+        return render_template('products/shop.html', products=products, shop=1)
 
 
 @app.route('/product/<int:id>')
