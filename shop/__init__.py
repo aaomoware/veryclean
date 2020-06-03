@@ -47,7 +47,7 @@ def cal_cart(orders):
         
     tax = ("%.2f" % (.21 * float(subtotal)))
     grandtotal += float(tax)
-    grandtotal += float("%.2f" % (1.06 * subtotal))
+    grandtotal += float(subtotal)
     grandtotal += float(os.environ['POST_COST'])
     
     amount = str(tax).split(".")
@@ -78,7 +78,7 @@ def cal_cart_total(orders):
     
     tax = ("%.2f" % (.21 * float(subtotal)))
     grandtotal += float(tax)
-    grandtotal += float("%.2f" % (1.06 * subtotal))
+    grandtotal += float(subtotal)
     grandtotal += float(os.environ['POST_COST'])
     
     amount = str(grandtotal).split(".")
