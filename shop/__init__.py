@@ -40,15 +40,15 @@ def cal_cart(orders):
     totaldiscount = 0
     
     for key, product in orders.items():
-        discount = (product['discount']/100 * float(product['price']) * int(product['quantity']))
-        totaldiscount += discount
+        discount = (product['discount']/100 * float(product['price']))
+        totaldiscount += discount * int(product['quantity'])
         subtotal += float(product['price']) * int(product['quantity'])
-        subtotal -= discount
         
     tax = ("%.2f" % (.21 * float(subtotal)))
     grandtotal += float(tax)
     grandtotal += float(subtotal)
     grandtotal += float(os.environ['POST_COST'])
+    grandtotal -= totaldiscount
     
     amount = str(tax).split(".")
     if len(amount[1]) == 1:
@@ -67,19 +67,21 @@ def cal_cart(orders):
 
 
 def cal_cart_total(orders):
-    discount = 0
+    tax = 0
     subtotal = 0
     grandtotal = 0
+    totaldiscount = 0
     
     for key, product in orders.items():
-        discount = (product['discount']/100 * float(product['price']) * int(product['quantity']))
+        discount = (product['discount']/100 * float(product['price']))
+        totaldiscount += discount * int(product['quantity'])
         subtotal += float(product['price']) * int(product['quantity'])
-        subtotal -= discount
-    
+        
     tax = ("%.2f" % (.21 * float(subtotal)))
     grandtotal += float(tax)
     grandtotal += float(subtotal)
     grandtotal += float(os.environ['POST_COST'])
+    grandtotal -= totaldiscount
     
     amount = str(grandtotal).split(".")
     if len(amount[1]) == 1:
