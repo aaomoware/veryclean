@@ -130,23 +130,12 @@ def get_order():
 @app.route('/orders/<invoice>', methods=['GET'])
 @login_required
 def orders(invoice):
-    totaldiscount = 0
-    grandtotal = 0
-    subtotal = 0
     customer_id = current_user.id
     customer = Register.query.filter_by(id=customer_id).first()
     orders = CustomerOrder.query.filter_by(customer_id=customer_id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
-    tax = 0
-        
-    for _key, product in orders.orders.items():
-        discount = (product['discount']/100) * float(product['price'])
-        subtotal += float(product['price']) * int(product['quantity'])
-        subtotal -= discount
-        tax = ("%.2f" % (.06 * float(subtotal)))
-        grandtotal = float("%.2f" % (1.06 * subtotal))
-        totaldiscount += discount
-    
-    return render_template('customer/orders.html', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=orders)
+
+    tax, subtotal, grandtotal, totaldiscount, delivery = cal_cart(orders.orders)
+    return render_template('customer/orders.html', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, delivery=delivery, customer=customer, orders=orders)
 
 
 @app.route('/get_pdf/<invoice>', methods=['POST'])
@@ -157,8 +146,8 @@ def get_pdf(invoice):
             customer = Register.query.filter_by(id=current_user.id).first()
             customer_order = CustomerOrder.query.filter_by(customer_id=current_user.id, invoice=invoice).order_by(CustomerOrder.id.desc()).first()
             
-            tax, subtotal, grandtotal, totaldiscount, post_cost = cal_cart(customer_order.orders)
-            html = render_template('customer/invoice.html',status='Paid', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=customer_order.orders, post_cost=post_cost)
+            tax, subtotal, grandtotal, totaldiscount, delivery = cal_cart(customer_order.orders)
+            html = render_template('customer/invoice.html',status='Paid', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=customer_order.orders, delivery=delivery)
             return render_pdf(HTML(string=html))
         return request(url_for('orders'))
 
@@ -188,8 +177,8 @@ def ordercomplete(invoice):
           #reply_to=str(current_user.email),
           #recipients=[str(current_user.email)])
           
-        tax, subtotal, grandtotal, totaldiscount, post_cost = cal_cart(customer_order.orders)
-        html = render_template('customer/invoice.html',status='Paid', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=customer_order.orders, post_cost=post_cost)
+        tax, subtotal, grandtotal, totaldiscount, delivery = cal_cart(customer_order.orders)
+        html = render_template('customer/invoice.html',status='Paid', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, discount=totaldiscount, customer=customer, orders=customer_order.orders, delivery=delivery)
         
         msg.html = str(html)
         mail.send(msg)
