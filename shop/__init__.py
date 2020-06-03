@@ -40,7 +40,7 @@ def cal_cart(orders):
     totaldiscount = 0
     
     for key, product in orders.items():
-        discount = (product['discount']/100 * float(product['price']))
+        discount = (product['discount']/100 * float(product['price']) * int(product['quantity']))
         totaldiscount += discount
         subtotal += float(product['price']) * int(product['quantity'])
         subtotal -= discount
@@ -72,7 +72,7 @@ def cal_cart_total(orders):
     grandtotal = 0
     
     for key, product in orders.items():
-        discount = (product['discount']/100 * float(product['price']))
+        discount = (product['discount']/100 * float(product['price']) * int(product['quantity']))
         subtotal += float(product['price']) * int(product['quantity'])
         subtotal -= discount
     
